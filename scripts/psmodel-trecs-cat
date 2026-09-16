@@ -1,0 +1,1042 @@
+#!/usr/bin/env python3
+"""
+psmodel-trecs-cat
+-----------------
+CLI tool to generate realistic astronomical source catalogues using T-RECS.
+
+Key Features:
+1. Field Centre: Supports flexible input formats (decimal degrees, sexagesimal HMS/DMS, colons, spaces).
+2. Frequencies: Accepts comma-separated or space-separated central frequencies (--freq-MHz).
+   The simulated sky is created ONCE, and a dedicated catalogue is output for each frequency.
+3. Common Sky Footprint: The exact same sources (same ID, RA, Dec, morphology) exist across all
+   frequency catalogues, with frequency-dependent fluxes, local spectral index, and curvature.
+4. Primary Beam Optics: Supports --FOV-arcmin directly, or calculates the primary beam first null
+   (or multiple) from dish antenna diameter (--ant-dia-met).
+5. Output Columns: Exactly and only the requested columns:
+   [id, ra, dec, separation_arcmin, total_flux_mjy, spectral_index, spectral_curvature, bmaj, bmin, pa, redshift, radioclass]
+
+Follows PSModel workspace conventions:
+- Fits files output to: data/
+- Catalogue CSVs output to: catalogue/
+- Execution and logs in: workdir/ and workdir/logs/
+"""
+
+from __future__ import annotations
+
+import argparse
+import logging
+import math
+import os
+from pathlib import Path
+import shutil
+import subprocess
+import sys
+import time
+from typing import Sequence
+import warnings
+
+from astropy.coordinates import SkyCoord
+import astropy.units as u
+from astropy.table import Table
+import numpy as np
+import pandas as pd
+import scipy.special
+
+# Suppress non-standard FITS unit warnings from Astropy
+warnings.filterwarnings("ignore", category=u.UnitsWarning)
+
+SPEED_OF_LIGHT = 299792458.0
+
+DEFAULT_ELAISN1_RA_DEG = 242.58044352927   # ~ 16h10m19.3s
+DEFAULT_ELAISN1_DEC_DEG = 55.048776822222  # ~ +55d02m55.6s
+DEFAULT_NU0_MHZ = [400.0]                  # 400 MHz default
+
+
+def parse_field_centre(inputs: Sequence[str] | str) -> tuple[float, float]:
+    """Parse field centre RA and Dec inputs in various formats into decimal degrees."""
+    if isinstance(inputs, (list, tuple)):
+        raw = " ".join(str(x) for x in inputs).strip()
+    else:
+        raw = str(inputs).strip()
+
+    raw = raw.replace(",", " ")
+    parts = raw.split()
+
+    if len(parts) == 2:
+        try:
+            return float(parts[0]), float(parts[1])
+        except ValueError:
+            pass
+        for u_ra in [u.hourangle, u.deg]:
+            try:
+                c = SkyCoord(parts[0], parts[1], unit=(u_ra, u.deg))
+                return float(c.ra.deg), float(c.dec.deg)
+            except Exception:
+                continue
+
+    elif len(parts) == 6:
+        ra_str = f"{parts[0]}h{parts[1]}m{parts[2]}s"
+        dec_str = f"{parts[3]}d{parts[4]}m{parts[5]}s"
+        try:
+            c = SkyCoord(ra_str, dec_str)
+            return float(c.ra.deg), float(c.dec.deg)
+        except Exception:
+            pass
+
+    try:
+        c = SkyCoord(raw, unit=(u.hourangle, u.deg))
+        return float(c.ra.deg), float(c.dec.deg)
+    except Exception:
+        pass
+
+    try:
+        c = SkyCoord(raw, unit=(u.deg, u.deg))
+        return float(c.ra.deg), float(c.dec.deg)
+    except Exception:
+        pass
+
+    raise ValueError(
+        f"Unable to parse field centre: '{inputs}'. "
+        "Supported formats: decimal degrees ('242.58 55.05'), "
+        "HMS/DMS ('16h10m19.3s +55d02m55.6s'), or colon-separated ('16:10:19.3 +55:02:55.6')."
+    )
+
+
+BEAM_COEFFICIENTS = {
+    "null1": 1.21966989126651,   # 1st Airy null (1.22 * lambda / D)
+    "null2": 2.23313059438153,   # 2nd Airy null (2.233 * lambda / D)
+    "fwhm": 1.02899151,          # Full Width at Half Maximum (1.029 * lambda / D)
+    "fwhmb2": 0.514495755,       # FWHM by 2 (HWHM / half-power radius = 0.5145 * lambda / D)
+}
+
+BEAM_MODE_DESCRIPTIONS = {
+    "null1": "1st null",
+    "null2": "2nd null",
+    "fwhm": "FWHM",
+    "fwhmb2": "FWHM/2 (HWHM)",
+}
+
+
+def parse_antenna_options(
+    ant_dia_inputs: Sequence[str | float] | None,
+    null_factor_arg: float = 1.0,
+    n_freqs: int = 1,
+) -> tuple[list[float] | None, str, float]:
+    """
+    Parse antenna diameter(s), beam mode ('null1', 'null2', 'fwhm', 'fwhmb2'), and multiplier.
+    Returns (dia_list, beam_mode, multiplier) where dia_list has length n_freqs (or None).
+    """
+    if ant_dia_inputs is None:
+        return None, "null1", null_factor_arg
+
+    raw = " ".join(str(x) for x in ant_dia_inputs).replace(",", " ")
+    tokens = raw.split()
+    if not tokens:
+        return None, "null1", null_factor_arg
+
+    beam_mode = "null1"
+    multiplier = null_factor_arg
+    num_tokens = []
+
+    for tok in tokens:
+        tok_clean = tok.lower().replace("_", "").replace("/", "")
+        if tok_clean in BEAM_COEFFICIENTS:
+            beam_mode = tok_clean
+        else:
+            try:
+                val = float(tok)
+                num_tokens.append(val)
+            except ValueError:
+                raise ValueError(
+                    f"Unrecognized token '{tok}' in --antenna-dia-met / --ant-dia-met. "
+                    f"Expected antenna diameter in meters or one of {list(BEAM_COEFFICIENTS.keys())}."
+                )
+
+    if not num_tokens:
+        raise ValueError("At least one numeric antenna diameter in meters must be provided.")
+
+    if len(num_tokens) == 1:
+        dia_list = [num_tokens[0]] * n_freqs
+    elif len(num_tokens) == n_freqs:
+        dia_list = num_tokens
+    elif len(num_tokens) == n_freqs + 1:
+        dia_list = num_tokens[:n_freqs]
+        multiplier = num_tokens[-1]
+    elif len(num_tokens) == 2 and n_freqs == 1:
+        dia_list = [num_tokens[0]]
+        multiplier = num_tokens[1]
+    else:
+        raise ValueError(
+            f"Invalid number of antenna diameter values ({len(num_tokens)}) for {n_freqs} frequency band(s). "
+            f"Expected either 1 diameter (for all bands) or exactly {n_freqs} (one per band)."
+        )
+
+    return dia_list, beam_mode, multiplier
+
+
+def calc_beam_radius_arcmin(
+    ant_dia_m: float,
+    freq_mhz: float,
+    beam_mode: str = "null1",
+    multiplier: float = 1.0,
+) -> float:
+    """Calculate beam radius in arcminutes based on antenna diameter, frequency, mode, and multiplier."""
+    coef = BEAM_COEFFICIENTS.get(beam_mode.lower(), BEAM_COEFFICIENTS["null1"])
+    wavelength_m = SPEED_OF_LIGHT / (freq_mhz * 1e6)
+    theta_rad = coef * (wavelength_m / ant_dia_m)
+    theta_arcmin = theta_rad * (180.0 * 60.0 / np.pi)
+    return float(theta_arcmin * multiplier)
+
+
+def calc_null_radius_arcmin(ant_dia_m: float, freq_mhz: float, null_factor: float = 1.0) -> float:
+    """Legacy compatibility helper: Calculate Airy disk primary beam first null radius in arcminutes."""
+    return calc_beam_radius_arcmin(ant_dia_m, freq_mhz, "null1", null_factor)
+
+
+def calc_primary_beam_factor(
+    separation_arcmin: float | np.ndarray,
+    freq_mhz: float,
+    ant_dia_m: float,
+) -> float | np.ndarray:
+    """
+    Calculate Airy disk primary beam attenuation factor PB(theta) = [2 * J1(x) / x]^2
+    where x = (pi * D / lambda) * theta_rad.
+    Returns attenuation factor between 0.0 and 1.0.
+    """
+    wavelength_m = SPEED_OF_LIGHT / (freq_mhz * 1e6)
+    theta_rad = np.asarray(separation_arcmin, dtype=float) * (np.pi / (180.0 * 60.0))
+    x = (np.pi * ant_dia_m / wavelength_m) * theta_rad
+
+    scalar_input = np.ndim(separation_arcmin) == 0
+    x_arr = np.atleast_1d(x)
+
+    pb = np.ones_like(x_arr, dtype=float)
+    nonzero = np.abs(x_arr) > 1e-7
+    if np.any(nonzero):
+        x_nz = x_arr[nonzero]
+        j1_val = scipy.special.j1(x_nz)
+        pb[nonzero] = (2.0 * j1_val / x_nz) ** 2
+
+    pb = np.clip(pb, 0.0, 1.0)
+    return float(pb[0]) if scalar_input else pb
+
+
+def calc_pb_reduction_factor(
+    radius_arcmin: float,
+    freq_mhz: float,
+    ant_dia_m: float,
+    beta: float = 0.88,
+) -> float:
+    """
+    Compute analytical primary beam reduction factor eta_PB for cumulative source counts.
+    eta_PB = (int_0^R [PB(theta)]^beta * theta dtheta) / (int_0^R theta dtheta)
+    """
+    wavelength_m = SPEED_OF_LIGHT / (freq_mhz * 1e6)
+    r_rad = radius_arcmin * (np.pi / (180.0 * 60.0))
+    x_max = (np.pi * ant_dia_m / wavelength_m) * r_rad
+
+    if x_max <= 1e-4:
+        return 1.0
+
+    x = np.linspace(1e-6, x_max, 500)
+    j1_val = scipy.special.j1(x)
+    A = np.clip((2.0 * j1_val / x) ** 2, 0.0, 1.0)
+
+    num = np.trapezoid((A ** beta) * x, x)
+    den = np.trapezoid(x, x)
+    if den <= 0:
+        return 1.0
+    return float(np.clip(num / den, 0.01, 1.0))
+
+
+def parse_frequencies(freq_inputs: Sequence[str] | Sequence[float] | str) -> list[float]:
+    """Parse comma- or space-separated frequencies into a list of floats (preserving user order)."""
+    if isinstance(freq_inputs, (list, tuple)):
+        raw = " ".join(str(x) for x in freq_inputs)
+    else:
+        raw = str(freq_inputs)
+    raw = raw.replace(",", " ")
+    freqs = [float(x) for x in raw.split()]
+    if not freqs:
+        raise ValueError("At least one frequency must be provided.")
+    # Return unique frequencies in order of first appearance
+    seen = set()
+    result = []
+    for f in freqs:
+        if f not in seen:
+            seen.add(f)
+            result.append(f)
+    return result
+
+
+def build_evaluation_grid(user_freqs: list[float]) -> tuple[dict[float, tuple[int, int, int]], list[int]]:
+    """
+    For each requested frequency f, create a triplet [f_minus, f_int, f_plus]
+    to allow exact local derivative calculation for spectral index and curvature.
+    Returns (grid_dict, all_unique_integer_simulation_frequencies).
+    """
+    grid = {}
+    for f in user_freqs:
+        f_int = int(round(f))
+        f_minus = int(round(f * 0.97))
+        f_plus = int(round(f * 1.03))
+        if f_minus >= f_int:
+            f_minus = f_int - 1
+        if f_plus <= f_int:
+            f_plus = f_int + 1
+        grid[f] = (f_minus, f_int, f_plus)
+
+    all_sim = sorted(list(set(x for triplet in grid.values() for x in triplet)))
+    return grid, all_sim
+
+
+def parse_multi_entry_floats(
+    raw_input: Sequence[str] | Sequence[float] | str | float | None,
+    n_freqs: int,
+    param_name: str,
+) -> list[float] | None:
+    """
+    Parse a command line argument that can accept either:
+      - A single value (broadcast to all n_freqs)
+      - Multiple values matching n_freqs (comma- or space-separated)
+    Returns None if raw_input is None.
+    Raises ValueError if the number of values is neither 1 nor n_freqs.
+    """
+    if raw_input is None:
+        return None
+    if isinstance(raw_input, (list, tuple)):
+        raw = " ".join(str(x) for x in raw_input)
+    else:
+        raw = str(raw_input)
+    raw = raw.replace(",", " ").strip()
+    if not raw:
+        return None
+    vals = [float(x) for x in raw.split()]
+    if not vals:
+        return None
+    if len(vals) == 1:
+        return [vals[0]] * n_freqs
+    elif len(vals) == n_freqs:
+        return vals
+    else:
+        raise ValueError(
+            f"Invalid number of values for {param_name}: got {len(vals)} value(s), "
+            f"but expected either 1 (to apply to all frequencies) or exactly {n_freqs} (one per frequency)."
+        )
+
+
+def estimate_simulation(
+    fov_arcmin_dict: dict[float, float],
+    frequencies_mhz: list[float],
+    min_flux_mjy_dict: dict[float, float | None],
+    max_sources: int | None,
+    pb_effect: bool = False,
+    ant_dia_m: float | dict[float, float] | None = None,
+) -> dict:
+    """Compute dry-run estimates for expected sources, RAM, disk space, runtime, and min/max flux per band."""
+    max_radius_arcmin = max(fov_arcmin_dict.values())
+    max_radius_deg = max_radius_arcmin / 60.0
+    sim_side_deg = (2.0 * max_radius_deg) * 1.05
+    area_box_deg2 = sim_side_deg ** 2
+
+    nu_ref = min(frequencies_mhz)
+    n_user = len(frequencies_mhz)
+    n_eval = n_user * 3
+
+    band_estimates = {}
+    equiv_min_fluxes_at_ref = []
+
+    for nu in frequencies_mhz:
+        r_arcmin = fov_arcmin_dict[nu]
+        r_deg = r_arcmin / 60.0
+        area_circle_deg2 = np.pi * (r_deg ** 2)
+        s_user = min_flux_mjy_dict[nu]
+
+        freq_scale = (nu / 400.0) ** (-0.75 * 0.88)
+        coeff_band = 500.0 * freq_scale
+
+        if s_user is not None:
+            effective_flux_band = s_user
+            raw_sources = int(round(coeff_band * area_circle_deg2 * (max(s_user, 1e-4) ** -0.88)))
+            cat_min_flux = s_user
+        elif max_sources is not None:
+            target_raw = int(round(max_sources * 2.0))
+            s_est = (target_raw / max(coeff_band * area_circle_deg2, 1e-6)) ** (-1.0 / 0.88)
+            effective_flux_band = max(s_est, 1e-3)
+            raw_sources = max_sources
+            cat_min_flux = effective_flux_band
+        else:
+            effective_flux_band = 0.1
+            raw_sources = int(round(coeff_band * area_circle_deg2 * (0.1 ** -0.88)))
+            cat_min_flux = 0.1
+
+        eta_pb = 1.0
+        if pb_effect:
+            if isinstance(ant_dia_m, dict):
+                dish_dia = ant_dia_m.get(nu)
+            else:
+                dish_dia = ant_dia_m
+            if dish_dia is None:
+                wl = SPEED_OF_LIGHT / (nu * 1e6)
+                dish_dia = 1.22 * wl / (r_arcmin * (np.pi / (180.0 * 60.0)))
+            eta_pb = calc_pb_reduction_factor(r_arcmin, nu, dish_dia)
+            raw_sources = int(round(raw_sources * eta_pb))
+
+        final_sources = min(raw_sources, max_sources) if max_sources is not None else raw_sources
+        exp_max_flux = max(cat_min_flux, (coeff_band * max(area_circle_deg2, 1e-4)) ** (1.0 / 0.88))
+
+        scale_to_ref = min(1.0, (nu_ref / nu) ** 0.75)
+        equiv_min_fluxes_at_ref.append(effective_flux_band * scale_to_ref)
+
+        band_estimates[nu] = {
+            "fov_arcmin": r_arcmin,
+            "radius_deg": r_deg,
+            "area_circle_deg2": area_circle_deg2,
+            "min_flux_mjy": cat_min_flux,
+            "min_flux_jy": cat_min_flux * 1e-3,
+            "max_flux_mjy": exp_max_flux,
+            "max_flux_jy": exp_max_flux * 1e-3,
+            "raw_sources": raw_sources,
+            "final_sources": final_sources,
+            "eta_pb": eta_pb,
+        }
+
+    overall_min_flux_mjy = min(equiv_min_fluxes_at_ref) if equiv_min_fluxes_at_ref else 0.1
+    overall_min_flux_jy = overall_min_flux_mjy * 1e-3
+
+    coeff_ref = 500.0 * ((nu_ref / 400.0) ** (-0.75 * 0.88))
+    expected_raw_box = int(round(coeff_ref * area_box_deg2 * (max(overall_min_flux_mjy, 1e-4) ** -0.88)))
+
+    bytes_per_source = (n_eval + 30) * 8
+    dynamic_ram_mb = (expected_raw_box * bytes_per_source) / (1024 * 1024)
+    estimated_ram_mb = 240.0 + dynamic_ram_mb
+
+    total_csv_sources = sum(b["final_sources"] for b in band_estimates.values())
+    csv_size_mb = (total_csv_sources * 150) / (1024 * 1024)
+    temp_slices_mb = min(60.0, 15.0 + area_box_deg2 * 4.0)
+    total_disk_mb = temp_slices_mb + csv_size_mb
+
+    t_sample = 1.5 + 3.0 * area_box_deg2 * (n_eval ** 0.35)
+    t_wrap = 0.8 + (expected_raw_box * 0.0001)
+    estimated_time_sec = t_sample + t_wrap
+
+    return {
+        "max_radius_arcmin": max_radius_arcmin,
+        "max_radius_deg": max_radius_deg,
+        "sim_side_deg": sim_side_deg,
+        "area_box_deg2": area_box_deg2,
+        "effective_min_flux_mjy": overall_min_flux_mjy,
+        "effective_min_flux_jy": overall_min_flux_jy,
+        "band_estimates": band_estimates,
+        "expected_raw_box": expected_raw_box,
+        "estimated_ram_mb": estimated_ram_mb,
+        "estimated_disk_mb": total_disk_mb,
+        "temp_slices_mb": temp_slices_mb,
+        "csv_size_mb": csv_size_mb,
+        "estimated_time_sec": estimated_time_sec,
+    }
+
+
+def find_trecs_executable() -> str:
+    """Locate the trecs binary on the system."""
+    cmd = shutil.which("trecs")
+    if cmd:
+        return cmd
+    for candidate in ["/opt/homebrew/bin/trecs", "/usr/local/bin/trecs"]:
+        if os.path.isfile(candidate) and os.access(candidate, os.X_OK):
+            return candidate
+    raise FileNotFoundError(
+        "Could not locate 'trecs' executable. Please ensure T-RECS is installed "
+        "in your PATH or at /opt/homebrew/bin/trecs."
+    )
+
+
+def build_argparser() -> argparse.ArgumentParser:
+    """Construct the command line argument parser."""
+    parser = argparse.ArgumentParser(
+        description="Generate realistic astronomical source catalogues using T-RECS with shared common sky across frequencies.",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+
+    # 1. Field Centre
+    parser.add_argument(
+        "--field-centre", "--field-center", "--pointing",
+        nargs="+",
+        dest="field_centre",
+        default=[str(DEFAULT_ELAISN1_RA_DEG), str(DEFAULT_ELAISN1_DEC_DEG)],
+        help="Field centre coordinates: RA and Dec (supports decimal degrees, HMS/DMS '16h10m19.3s +55d02m55.6s', colons, or spaces). Defaults to ELAIS-N1.",
+    )
+
+    # 2. Central Frequencies
+    parser.add_argument(
+        "--freq-MHz", "--freq", "--frequencies",
+        nargs="+",
+        dest="freq_mhz",
+        default=DEFAULT_NU0_MHZ,
+        help="Central frequency or comma-separated list of frequencies in MHz (e.g. 400 or 400,610 or 150,325,610). Simulates the sky once and creates one catalogue per frequency.",
+    )
+
+    # 3. Radius of the field in arcmin
+    parser.add_argument(
+        "--FOV-arcmin", "--fov-arcmin", "--FOV-arc-min", "--fov-arc-min", "--radius-arcmin",
+        nargs="+",
+        dest="fov_arcmin",
+        default=None,
+        help="Radius of the field in arcminutes (e.g. 35.0, or multiple values matching frequencies: 46.0, 100.0).",
+    )
+
+    # 4. Antenna Diameter in meters and beam options
+    parser.add_argument(
+        "--antenna-dia-met", "--ant-dia-met", "--antenna-dia", "--ant-dia",
+        "--antenna-beam-met", "--ant-beam-met", "--ant-beam",
+        nargs="+",
+        dest="ant_dia_met",
+        default=None,
+        help=(
+            "Antenna diameter in meters (e.g. 68. for GMRT, 13.5 for MeerKAT). "
+            "Can accept a single value (applied to all bands) or multiple values matching frequencies. "
+            "Can be specified alongside --FOV-arcmin when using --pb-effect so sources are generated "
+            "to the specified FOV and attenuated by the antenna beam pattern. "
+            "Supports beam modes 'null1' (1st null, default), 'null2', 'fwhm', 'fwhmb2', "
+            "and/or numeric multipliers (e.g. '68 null1', '68 fwhm 1.5')."
+        ),
+    )
+    parser.add_argument(
+        "--null-factor", "--null-multiplier", "--beam-factor",
+        dest="null_factor",
+        type=float,
+        default=1.0,
+        help="Multiplier for the primary beam radius (default 1.0).",
+    )
+
+    # 5. Max sources
+    parser.add_argument(
+        "--max-sources",
+        dest="max_sources",
+        type=int,
+        default=None,
+        help="Optional maximum number of sources to keep in the final catalogue (e.g. 1024).",
+    )
+
+    # 6. Min flux (mJy)
+    parser.add_argument(
+        "--min-flux-mjy", "--min-flux-mJy", "--min-flux",
+        nargs="+",
+        dest="min_flux_mjy",
+        default=None,
+        help="Optional minimum flux density threshold in mJy (e.g. 0.05, or multiple values matching frequencies: 0.11, 0.25).",
+    )
+    parser.add_argument(
+        "--min-flux-Jy", "--min-flux-jy",
+        nargs="+",
+        dest="min_flux_jy",
+        default=None,
+        help=argparse.SUPPRESS,  # Deprecated in favor of --min-flux-mjy
+    )
+
+    # 7. Primary Beam Effect
+    parser.add_argument(
+        "--pb-effect", "-pb-effect", "--primary-beam-effect",
+        dest="pb_effect",
+        action="store_true",
+        default=False,
+        help="Apply primary beam attenuation to source flux densities and exclude sources whose attenuated flux falls below the minimum flux threshold.",
+    )
+
+    # 8. Catalogue name
+    parser.add_argument(
+        "--catalogue-name", "--output-name",
+        dest="catalogue_name",
+        type=str,
+        default="psmodel_trecs_cat",
+        help="Base name for the generated catalogue files.",
+    )
+
+    # Simulation Controls
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Display expected sources, RAM, disk space, and runtime estimates without running T-RECS.",
+    )
+    parser.add_argument(
+        "--seed",
+        type=int,
+        default=666,
+        help="Random seed for simulation reproducibility.",
+    )
+    parser.add_argument(
+        "--trecs-inputs",
+        type=str,
+        default="/Users/sgayen/DATA",
+        help="Path to directory containing TRECS_Inputs database.",
+    )
+
+    return parser
+
+
+def main(argv: Sequence[str] | None = None) -> int:
+    """Main execution entry point."""
+    parser = build_argparser()
+    args = parser.parse_args(argv)
+
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s [%(levelname)s] %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
+
+    # 1. Parse Field Centre
+    try:
+        ra_deg, dec_deg = parse_field_centre(args.field_centre)
+    except ValueError as err:
+        logging.error(str(err))
+        return 1
+
+    # 2. Parse Frequencies
+    try:
+        user_frequencies = parse_frequencies(args.freq_mhz)
+    except Exception as err:
+        logging.error(f"Invalid frequency input: {err}")
+        return 1
+
+    # 3. Parse Min Flux (per-frequency or single broadcast)
+    raw_min_flux = args.min_flux_mjy if args.min_flux_mjy is not None else args.min_flux_jy
+    if args.min_flux_jy is not None and args.min_flux_mjy is None:
+        logging.warning("Note: --min-flux-Jy is deprecated, please use --min-flux-mjy instead.")
+    try:
+        min_flux_list = parse_multi_entry_floats(raw_min_flux, len(user_frequencies), "--min-flux-mjy")
+    except ValueError as err:
+        logging.error(str(err))
+        return 1
+    if args.min_flux_jy is not None and args.min_flux_mjy is None and min_flux_list is not None:
+        min_flux_list = [x * 1e3 for x in min_flux_list]
+
+    min_flux_dict = {
+        nu: (min_flux_list[i] if min_flux_list is not None else None)
+        for i, nu in enumerate(user_frequencies)
+    }
+
+    # 4. Parse FOV (per-frequency or single broadcast)
+    try:
+        fov_list = parse_multi_entry_floats(args.fov_arcmin, len(user_frequencies), "--FOV-arcmin")
+    except ValueError as err:
+        logging.error(str(err))
+        return 1
+
+    # 5. Parse Antenna Options
+    null_factor = args.null_factor
+    ant_dia_list = None
+    beam_mode = "null1"
+    if args.ant_dia_met is not None:
+        try:
+            ant_dia_list, beam_mode, null_factor = parse_antenna_options(
+                args.ant_dia_met, args.null_factor, len(user_frequencies)
+            )
+        except Exception as err:
+            logging.error(f"Invalid --antenna-dia-met / --ant-dia-met input: {err}")
+            return 1
+
+    # Resolve FOV per frequency
+    fov_arcmin_dict = {}
+    fov_source_desc = {}
+    for i, nu in enumerate(user_frequencies):
+        if fov_list is not None:
+            fov_arcmin_dict[nu] = fov_list[i]
+            if len(set(fov_list)) == 1:
+                fov_source_desc[nu] = f"User specified ({fov_list[i]:.2f} arcmin for all)"
+            else:
+                fov_source_desc[nu] = f"User specified ({fov_list[i]:.2f} arcmin)"
+        elif ant_dia_list is not None:
+            d_val = ant_dia_list[i]
+            radius = calc_beam_radius_arcmin(d_val, nu, beam_mode, null_factor)
+            fov_arcmin_dict[nu] = radius
+            mode_desc = BEAM_MODE_DESCRIPTIONS.get(beam_mode, beam_mode)
+            mult_str = f" ({null_factor:.2f}x {mode_desc})" if null_factor != 1.0 else f" ({mode_desc})"
+            fov_source_desc[nu] = f"Antenna Beam {d_val:.1f}m @ {nu:.1f}MHz{mult_str}"
+        else:
+            fov_arcmin_dict[nu] = 30.0
+            fov_source_desc[nu] = "Default (30.0 arcmin)"
+
+    min_freq = min(user_frequencies)
+    max_freq = max(user_frequencies)
+    max_radius_arcmin = max(fov_arcmin_dict.values())
+    max_radius_deg = max_radius_arcmin / 60.0
+    sim_side_deg = (2.0 * max_radius_deg) * 1.05
+
+    # 6. Determine Effective Antenna Diameter for Primary Beam Effect
+    pb_dish_dia_dict = {}
+    for i, nu in enumerate(user_frequencies):
+        if ant_dia_list is not None:
+            pb_dish_dia_dict[nu] = ant_dia_list[i]
+        else:
+            # Infer equivalent dish diameter from FOV radius (assuming 1st null at this frequency)
+            wl = SPEED_OF_LIGHT / (nu * 1e6)
+            r_rad = fov_arcmin_dict[nu] * (np.pi / (180.0 * 60.0))
+            pb_dish_dia_dict[nu] = 1.22 * wl / r_rad
+
+    # Clean catalogue base name (strip directory paths and .csv extension if passed)
+    clean_cat_name = Path(args.catalogue_name).name
+    if clean_cat_name.lower().endswith(".csv"):
+        clean_cat_name = clean_cat_name[:-4]
+
+    # 7. Build frequency evaluation grid for exact local derivatives
+    freq_grid, all_sim_freqs = build_evaluation_grid(user_frequencies)
+
+    # 8. Dry Run Calculations
+    estimates = estimate_simulation(
+        fov_arcmin_dict=fov_arcmin_dict,
+        frequencies_mhz=user_frequencies,
+        min_flux_mjy_dict=min_flux_dict,
+        max_sources=args.max_sources,
+        pb_effect=args.pb_effect,
+        ant_dia_m=pb_dish_dia_dict,
+    )
+
+    print("=" * 74)
+    print("                PSModel T-RECS Catalogue Generator")
+    print("=" * 74)
+    print(f"  Field Centre         : RA = {ra_deg:.6f}°, Dec = {dec_deg:.6f}°")
+    print(f"  Frequencies (MHz)    : {', '.join(f'{f:.1f}' for f in user_frequencies)} ({len(user_frequencies)} catalogue(s))")
+    if len(set(fov_arcmin_dict.values())) == 1:
+        single_fov = next(iter(fov_arcmin_dict.values()))
+        print(f"  Field Radius (FOV)   : {single_fov:.2f} arcmin ({single_fov/60.0:.4f}°) [{fov_source_desc[user_frequencies[0]]}]")
+        print(f"  Field Area           : {np.pi * (single_fov/60.0)**2:.4f} deg² (Circular FOV)")
+    else:
+        print("  Field Radius (FOV) per Band:")
+        for nu in user_frequencies:
+            r_val = fov_arcmin_dict[nu]
+            print(f"    * {nu:.1f} MHz : {r_val:.2f} arcmin ({r_val/60.0:.4f}°) [{fov_source_desc[nu]}]")
+    if ant_dia_list is not None:
+        if len(set(ant_dia_list)) == 1:
+            print(f"  Antenna Diameter     : D = {ant_dia_list[0]} m, Mode = '{beam_mode}', Multiplier = {null_factor:.2f}x")
+        else:
+            print("  Antenna Diameter per Band:")
+            for i, nu in enumerate(user_frequencies):
+                print(f"    * {nu:.1f} MHz : D = {ant_dia_list[i]} m")
+    if args.pb_effect:
+        if ant_dia_list is not None:
+            if len(set(ant_dia_list)) == 1:
+                d_strs = f"D = {ant_dia_list[0]:.1f} m"
+            else:
+                d_strs = ", ".join(f"{nu:.1f} MHz: D = {ant_dia_list[i]:.1f} m" for i, nu in enumerate(user_frequencies))
+            print(f"  Primary Beam Effect  : ENABLED (Attenuated by antenna beam {d_strs}, attenuated cut)")
+        else:
+            print(f"  Primary Beam Effect  : ENABLED (Attenuated by beam matching FOV, attenuated cut)")
+    else:
+        print(f"  Primary Beam Effect  : Disabled (Flat Sky)")
+    if any(v is not None for v in min_flux_dict.values()):
+        if len(set(min_flux_dict.values())) == 1 and next(iter(min_flux_dict.values())) is not None:
+            s_val = next(iter(min_flux_dict.values()))
+            print(f"  Min Flux Cutoff      : {s_val:.4f} mJy ({s_val*1e-3:.3e} Jy)")
+        else:
+            print("  Min Flux Cutoff per Band:")
+            for nu in user_frequencies:
+                s_val = min_flux_dict[nu]
+                if s_val is not None:
+                    print(f"    * {nu:.1f} MHz : {s_val:.4f} mJy ({s_val*1e-3:.3e} Jy)")
+                else:
+                    print(f"    * {nu:.1f} MHz : None")
+    else:
+        print(f"  Effective Flux Lim   : {estimates['effective_min_flux_mjy']:.4f} mJy ({estimates['effective_min_flux_jy']:.3e} Jy)")
+    print(f"  Min Expected Flux    : {estimates['band_estimates'][min_freq]['min_flux_mjy']:.4f} mJy ({estimates['band_estimates'][min_freq]['min_flux_jy']:.3e} Jy) [at {min_freq:.1f} MHz]")
+    print(f"  Max Expected Flux    : {estimates['band_estimates'][min_freq]['max_flux_mjy']:.2f} mJy ({estimates['band_estimates'][min_freq]['max_flux_jy']:.3e} Jy) [at {min_freq:.1f} MHz]")
+    if args.max_sources is not None:
+        print(f"  Max Sources Cap      : {args.max_sources} sources (top brightest per catalogue)")
+    print(f"  Catalogue Base Name  : {clean_cat_name}")
+    print("=" * 74)
+
+    if args.dry_run:
+        print("\n" + "#" * 74)
+        print("                           DRY RUN ESTIMATES")
+        print("#" * 74)
+        print("  Per-Band Estimates:")
+        for nu in user_frequencies:
+            binfo = estimates["band_estimates"][nu]
+            pb_note = f" (PB visibility factor: {binfo['eta_pb']*100:.1f}%)" if args.pb_effect else " (Flat Sky)"
+            s_min_val = min_flux_dict[nu]
+            print(f"    * {nu:.1f} MHz :")
+            print(f"        - Field Radius      : {binfo['fov_arcmin']:.2f} arcmin (Area: {binfo['area_circle_deg2']:.4f} deg²)")
+            if s_min_val is not None:
+                print(f"        - Min Flux Cutoff   : {s_min_val:.4f} mJy ({s_min_val*1e-3:.3e} Jy)")
+            if args.pb_effect:
+                print(f"        - Expected Sources (PB Attenuated) : {binfo['raw_sources']:,}{pb_note}")
+            else:
+                print(f"        - Expected Sources within Radius   : {binfo['raw_sources']:,}{pb_note}")
+            if args.max_sources is not None:
+                print(f"        - Final Sources Cap : {binfo['final_sources']:,} sources")
+            print(f"        - Min Expected Flux : {binfo['min_flux_mjy']:.4f} mJy ({binfo['min_flux_jy']:.3e} Jy)")
+            print(f"        - Max Expected Flux : {binfo['max_flux_mjy']:.2f} mJy ({binfo['max_flux_jy']:.3e} Jy)")
+        print(f"  Estimated Peak RAM Usage             : {estimates['estimated_ram_mb']:.1f} MB")
+        print(f"  Estimated Total Disk Space           : {estimates['estimated_disk_mb']:.2f} MB")
+        print(f"    - Temporary Simulation Slices      : {estimates['temp_slices_mb']:.1f} MB")
+        print(f"    - Output CSV Tables (catalogue/)   : {estimates['csv_size_mb']:.2f} MB")
+        print(f"  Estimated Simulation Time            : ~{estimates['estimated_time_sec']:.1f} seconds")
+        print("#" * 74 + "\n")
+        return 0
+
+    # 9. Setup PSModel Directories
+    cwd = Path.cwd()
+    if (cwd.parent / "catalogue").is_dir() and (cwd.parent / "data").is_dir():
+        repo_root = cwd.parent
+    elif (cwd / "catalogue").is_dir() and (cwd / "data").is_dir():
+        repo_root = cwd
+    else:
+        repo_root = Path("/Users/sgayen/Documents/Work/PSModel")
+
+    data_dir = repo_root / "data"
+    catalogue_dir = repo_root / "catalogue"
+    workdir = repo_root / "workdir"
+    logs_dir = workdir / "logs"
+
+    data_dir.mkdir(parents=True, exist_ok=True)
+    catalogue_dir.mkdir(parents=True, exist_ok=True)
+    logs_dir.mkdir(parents=True, exist_ok=True)
+
+    run_timestamp = int(time.time())
+    sim_tmp_dir = workdir / f"trecs_tmp_{run_timestamp}"
+    sim_tmp_dir.mkdir(parents=True, exist_ok=True)
+    sim_out_dir = sim_tmp_dir / "output"
+    sim_out_dir.mkdir(parents=True, exist_ok=True)
+
+    log_file_path = logs_dir / f"{clean_cat_name}_{run_timestamp}.log"
+    log_file_path.parent.mkdir(parents=True, exist_ok=True)
+    file_handler = logging.FileHandler(log_file_path)
+    file_handler.setFormatter(logging.Formatter("%(asctime)s [%(levelname)s] %(message)s"))
+    logging.getLogger().addHandler(file_handler)
+
+    logging.info("Starting T-RECS simulation pipeline...")
+    logging.info(f"Execution run directory: {sim_tmp_dir}")
+    logging.info(f"Execution log written to: {log_file_path}")
+
+    # Write frequency_list.dat with all simulation frequencies
+    freq_file_path = sim_tmp_dir / "frequency_list.dat"
+    with open(freq_file_path, "w") as f:
+        f.write("# Frequencies in MHz\n")
+        for nu_int in all_sim_freqs:
+            f.write(f"{nu_int}\n")
+
+    sim_flux_limit = estimates["effective_min_flux_jy"]
+
+    # Write parameter_file.ini
+    param_file_path = sim_tmp_dir / "parameter_file.ini"
+    param_content = f"""TRECSinputs = {args.trecs_inputs}
+freqs_file = {freq_file_path}
+outdir = {sim_out_dir}
+
+sim_side = {sim_side_deg:.6f}
+z_min = 0.0
+z_max = 8.0
+seed = {args.seed}
+
+fluxlim_cont = {sim_flux_limit:.4e}
+fluxlim_cont_freq = {min_freq:.2f}
+save_lums = 0
+no_AGN = 0
+no_SFG = 0
+
+fluxlim_hi = 1.0
+
+lat_target = {dec_deg:.6f}
+lon_target = {ra_deg:.6f}
+do_flatuniform = 1
+"""
+    with open(param_file_path, "w") as f:
+        f.write(param_content)
+
+    # 10. Execute T-RECS (Single Master Simulation for All Frequencies)
+    trecs_bin = find_trecs_executable()
+    logging.info(f"Using T-RECS executable: {trecs_bin}")
+
+    t_start = time.time()
+
+    # Sampler
+    cmd_sampler = [trecs_bin, "-c", "-p", str(param_file_path)]
+    logging.info(f"Running sampler: {' '.join(cmd_sampler)}")
+    proc_sample = subprocess.run(
+        cmd_sampler,
+        cwd=str(sim_tmp_dir),
+        capture_output=True,
+        text=True,
+    )
+    with open(log_file_path, "a") as lf:
+        lf.write("=== SAMPLER OUTPUT ===\n" + proc_sample.stdout + "\n" + proc_sample.stderr + "\n")
+
+    if proc_sample.returncode != 0:
+        logging.error(f"T-RECS sampler failed with exit code {proc_sample.returncode}")
+        logging.error(proc_sample.stderr)
+        return proc_sample.returncode
+
+    # Wrapper
+    cmd_wrap = [trecs_bin, "-w", "continuum", "-p", str(param_file_path)]
+    logging.info(f"Running wrapper: {' '.join(cmd_wrap)}")
+    proc_wrap = subprocess.run(
+        cmd_wrap,
+        cwd=str(sim_tmp_dir),
+        capture_output=True,
+        text=True,
+    )
+    with open(log_file_path, "a") as lf:
+        lf.write("=== WRAPPER OUTPUT ===\n" + proc_wrap.stdout + "\n" + proc_wrap.stderr + "\n")
+
+    if proc_wrap.returncode != 0:
+        logging.error(f"T-RECS wrapper failed with exit code {proc_wrap.returncode}")
+        logging.error(proc_wrap.stderr)
+        return proc_wrap.returncode
+
+    t_elapsed = time.time() - t_start
+    logging.info(f"T-RECS single master simulation finished in {t_elapsed:.2f} seconds.")
+
+    # 11. Post-process Master Catalogue to Guarantee Persistent Identifiers Across Frequencies
+    raw_wrapped_fits = sim_out_dir / "catalogue_continuum_wrapped.fits"
+    if not raw_wrapped_fits.is_file():
+        logging.error(f"Expected output not found: {raw_wrapped_fits}")
+        return 1
+
+    logging.info("Processing master simulation catalogue...")
+    raw_table = Table.read(str(raw_wrapped_fits))
+    master_df = raw_table.to_pandas()
+    logging.info(f"Master simulation produced {len(master_df):,} sources across bounding box.")
+
+    # Calculate radial separation from field centre for every source
+    source_coords = SkyCoord(master_df["longitude"].values * u.deg, master_df["latitude"].values * u.deg)
+    center_coord = SkyCoord(ra_deg * u.deg, dec_deg * u.deg)
+    separations_arcmin = center_coord.separation(source_coords).arcmin
+    master_df["separation_arcmin"] = separations_arcmin
+
+    # Common sky footprint: Filter to maximum bounding circular FOV
+    in_master_fov = master_df["separation_arcmin"] <= max_radius_arcmin
+    master_df = master_df[in_master_fov].copy().reset_index(drop=True)
+    logging.info(f"Sources within maximum {max_radius_arcmin:.2f} arcmin radius: {len(master_df):,}")
+
+    # Standardize column types and assign persistent unique ID
+    if "ID_cont" in master_df.columns:
+        master_df["id"] = master_df["ID_cont"].astype(int)
+    elif "ID" in master_df.columns:
+        master_df["id"] = master_df["ID"].astype(int)
+    else:
+        master_df["id"] = np.arange(1, len(master_df) + 1, dtype=int)
+
+    master_df["ra"] = master_df["longitude"].astype(float)
+    master_df["dec"] = master_df["latitude"].astype(float)
+    master_df["bmaj"] = master_df["bmaj"].astype(float)
+    master_df["bmin"] = master_df["bmin"].astype(float)
+    master_df["pa"] = master_df["PA"].astype(float)
+    master_df["redshift"] = master_df["redshift"].astype(float)
+    master_df["radioclass"] = master_df["RadioClass"].astype(int)
+
+    # 12. Produce Separate Catalogue for Each Frequency with Only Requested Columns
+    final_col_order = [
+        "id",
+        "ra",
+        "dec",
+        "separation_arcmin",
+        "total_flux_mjy",
+        "spectral_index",
+        "spectral_curvature",
+        "bmaj",
+        "bmin",
+        "pa",
+        "redshift",
+        "radioclass",
+    ]
+
+    generated_files = []
+
+    for nu in user_frequencies:
+        target_fov = fov_arcmin_dict[nu]
+        target_min_flux = min_flux_dict[nu]
+        f_minus, f_int, f_plus = freq_grid[nu]
+        col_m = f"I{f_minus}"
+        col_0 = f"I{f_int}"
+        col_p = f"I{f_plus}"
+
+        # Filter sources within this band's FOV
+        in_band_fov = master_df["separation_arcmin"] <= target_fov
+        freq_df = master_df[in_band_fov].copy().reset_index(drop=True)
+
+        # Integrated flux at this frequency in mJy
+        flux_0 = np.maximum(freq_df[col_0].values, 1e-9)
+        flux_m = np.maximum(freq_df[col_m].values, 1e-9)
+        flux_p = np.maximum(freq_df[col_p].values, 1e-9)
+
+        if args.pb_effect:
+            pb_dish = pb_dish_dia_dict[nu]
+            pb_0 = calc_primary_beam_factor(freq_df["separation_arcmin"].values, nu, pb_dish)
+            pb_m = calc_primary_beam_factor(freq_df["separation_arcmin"].values, f_minus, pb_dish)
+            pb_p = calc_primary_beam_factor(freq_df["separation_arcmin"].values, f_plus, pb_dish)
+            flux_0 = flux_0 * pb_0
+            flux_m = flux_m * pb_m
+            flux_p = flux_p * pb_p
+
+        freq_df["total_flux_mjy"] = flux_0
+
+        # Exact local spectral index and local curvature via 3-point central differences
+        x_m = np.log(f_minus / f_int)
+        x_p = np.log(f_plus / f_int)
+        y_0 = np.log(np.maximum(flux_0, 1e-12))
+        y_m = np.log(np.maximum(flux_m, 1e-12))
+        y_p = np.log(np.maximum(flux_p, 1e-12))
+
+        d_p = (y_p - y_0) / x_p
+        d_m = (y_m - y_0) / x_m
+        q_curve = (d_p - d_m) / (x_p - x_m)
+        alpha_local = d_p - q_curve * x_p
+
+        freq_df["spectral_index"] = alpha_local
+        freq_df["spectral_curvature"] = q_curve
+
+        # Filter by this band's minimum flux cutoff
+        if target_min_flux is not None:
+            freq_df = freq_df[freq_df["total_flux_mjy"] >= target_min_flux].copy().reset_index(drop=True)
+
+        # Sort descending by total_flux_mjy
+        freq_df.sort_values(by="total_flux_mjy", ascending=False, inplace=True)
+        freq_df.reset_index(drop=True, inplace=True)
+
+        # Cap to max_sources if specified
+        if args.max_sources is not None and len(freq_df) > args.max_sources:
+            freq_df = freq_df.iloc[: args.max_sources].copy().reset_index(drop=True)
+
+        # Retain ONLY the requested 12 columns
+        output_df = freq_df[final_col_order].copy()
+
+        # Filename
+        if len(user_frequencies) == 1:
+            file_base = clean_cat_name
+        else:
+            file_base = f"{clean_cat_name}_{int(round(nu))}MHz"
+
+        csv_file = catalogue_dir / f"{file_base}.csv"
+        csv_file.parent.mkdir(parents=True, exist_ok=True)
+        output_df.to_csv(csv_file, index=False)
+
+        generated_files.append((nu, len(output_df), target_fov, target_min_flux, csv_file))
+        s_cut_msg = f", min-flux={target_min_flux:.4f} mJy" if target_min_flux is not None else ""
+        logging.info(
+            f"Saved {nu:.1f} MHz catalogue: {csv_file.name} "
+            f"({len(output_df):,} sources, FOV={target_fov:.2f}'{s_cut_msg})"
+        )
+
+    # 13. Clean up temporary working directory
+    shutil.rmtree(sim_tmp_dir, ignore_errors=True)
+    logging.info("Cleaned up temporary simulation directory.")
+
+    print("\n" + "=" * 74)
+    print("                    CATALOGUE GENERATION SUCCESSFUL")
+    print("=" * 74)
+    print(f"  Field Centre         : RA = {ra_deg:.6f}°, Dec = {dec_deg:.6f}°")
+    print(f"  Columns Saved (12)   : {', '.join(final_col_order)}")
+    print(f"  Simulation Time      : {t_elapsed:.2f} s")
+    print(f"  Generated Catalogues :")
+    for nu, count, fov_v, s_min_v, csv_path in generated_files:
+        s_str = f"{s_min_v:.4f} mJy" if s_min_v is not None else "None"
+        print(f"    * {nu:.1f} MHz -> {csv_path.name}")
+        print(f"        Sources: {count:,} | FOV: {fov_v:.2f}' | Min Flux: {s_str}")
+    print(f"  Execution Log File   : {log_file_path}")
+    print("=" * 74 + "\n")
+
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

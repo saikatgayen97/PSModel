@@ -1,0 +1,1784 @@
+2026-09-16 18:25:51,405 [INFO] Starting T-RECS simulation pipeline...
+2026-09-16 18:25:51,405 [INFO] Execution run directory: /Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351
+2026-09-16 18:25:51,405 [INFO] Execution log written to: /Users/sgayen/Documents/Work/PSModel/workdir/logs/elaisn1_dualband_1789563351.log
+2026-09-16 18:25:51,406 [INFO] Using T-RECS executable: /opt/homebrew/bin/trecs
+2026-09-16 18:25:51,406 [INFO] Running sampler: /opt/homebrew/bin/trecs -c -p /Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/parameter_file.ini
+=== SAMPLER OUTPUT ===
+  
+                T-RECS
+  
+ simulation area [square degrees]=   1.1025000000000000     
+ /Users/sgayen/DATA/TRECS_Inputs/alphaeff/alphascaling_1.4_4.8.txt                                                                                                                                       
+ /Users/sgayen/DATA/TRECS_Inputs/alphaeff/alphascaling_4.8_20.txt                                                                                                                                        
+ /Users/sgayen/DATA/TRECS_Inputs/alphaeff/alphascaling_1.4_0.150.txt                                                                                                                                     
+ /Users/sgayen/DATA/TRECS_Inputs/AGN_polafraction/Polfrac_AGNs_1e4_hales.dat                                                                                                                             
+ /Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/frequency_list.dat                                                                                                                    
+ coordinates  0.524999976     -0.524999976    
+ /Users/sgayen/DATA/TRECS_Inputs/LF/CharLum/Characteristic_Luminosity/z_bins.dat                                                                                                                         
+ /Users/sgayen/DATA/TRECS_Inputs/LF/CharLum/Characteristic_Luminosity/luminosity_0.01000.dat                                                                                                             
+ /Users/sgayen/DATA/TRECS_Inputs/LF/SEDdust.dat                                                                                                                                                          
+ ************************
+ AGNs: Processing redshift   9.9999997764825821E-003  Range   0.0000000000000000        1.4999999664723873E-002
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z0.01.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z0.01.txt                                                                                                                      
+ ************************
+ SFGs: Processing redshift   9.9999997764825821E-003  Range   0.0000000000000000        1.4999999664723873E-002
+ ************************
+ volume=   33.481845324645789     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z0.01.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z0.01.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z0.01.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   4.3163980999370424E-002
+ resize buffer
+ Number of galaxies above flux limit                    1
+ resize final flux 
+ SFRs and flux generated
+ number of spheroids galaxies for Mpc**3   8.6249999999999920E-128
+ number of lens_sphergalaxies for Mpc**3   8.6249999999999920E-128
+ done
+ ************************
+ AGNs: Processing redshift   1.9999999552965164E-002  Range   1.4999999664723873E-002   3.5000000149011612E-002
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z0.02.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z0.02.txt                                                                                                                      
+ ************************
+ SFGs: Processing redshift   1.9999999552965164E-002  Range   1.4999999664723873E-002   3.5000000149011612E-002
+ ************************
+ volume=   385.69042154659599     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z0.02.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z0.02.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z0.02.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   2.6464357235009037E-002
+ resize buffer
+ Number of galaxies above flux limit                   13
+ resize final flux 
+ SFRs and flux generated
+ number of spheroids galaxies for Mpc**3   8.1249999999999887E-128
+ number of lens_sphergalaxies for Mpc**3   8.0749999999999881E-128
+ done
+ ************************
+ AGNs: Processing redshift   5.0000000745058060E-002  Range   3.5000000149011612E-002   7.5000001117587090E-002
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z0.05.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z0.05.txt                                                                                                                      
+ ************************
+ SFGs: Processing redshift   5.0000000745058060E-002  Range   3.5000000149011612E-002   7.5000001117587090E-002
+ ************************
+ volume=   3584.5750950611896     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z0.05.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z0.05.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z0.05.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   1.2069515697602015E-002
+ resize buffer
+ Number of galaxies above flux limit                   43
+ resize final flux 
+ SFRs and flux generated
+ number of spheroids galaxies for Mpc**3   7.3749999999999853E-128
+ number of lens_sphergalaxies for Mpc**3   7.3249999999999857E-128
+ done
+ ************************
+ AGNs: Processing redshift  0.10000000149011612       Range   7.5000001117587090E-002  0.12500000372529030     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z0.10.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z0.10.txt                                                                                                                      
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   10.4967861       10.4967861    
+ sizes ends
+ dark mass starts
+ herg/lerg samples:                    1                    0                    1
+ dark mass ends
+ coordinates
+  0.137509733      0.137509733    
+   7.98848420E-02   7.98848420E-02
+ ************************
+ SFGs: Processing redshift  0.10000000149011612       Range   7.5000001117587090E-002  0.12500000372529030     
+ ************************
+ volume=   13841.268230427704     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z0.10.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z0.10.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z0.10.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   5.6786750892140929E-003
+ resize buffer
+ Number of galaxies above flux limit                   75
+ resize final flux 
+ SFRs and flux generated
+ number of spheroids galaxies for Mpc**3   6.7749999999999848E-128
+ number of lens_sphergalaxies for Mpc**3   6.7749999999999848E-128
+ done
+ ************************
+ AGNs: Processing redshift  0.15000000596046448       Range  0.12500000372529030       0.17500000447034836     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z0.15.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z0.15.txt                                                                                                                      
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   19.8418922       29.2203941    
+ sizes ends
+ dark mass starts
+ herg/lerg samples:                    2                    0                    2
+ dark mass ends
+ coordinates
+ -0.448547810      0.271795094    
+ -0.487437814      0.259161472    
+ ************************
+ SFGs: Processing redshift  0.15000000596046448       Range  0.12500000372529030       0.17500000447034836     
+ ************************
+ volume=   29257.615698029862     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z0.15.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z0.15.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z0.15.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   3.3525415895449577E-003
+ resize buffer
+ Number of galaxies above flux limit                   92
+ resize final flux 
+ SFRs and flux generated
+ number of spheroids galaxies for Mpc**3   6.4249999999999865E-128
+ number of lens_sphergalaxies for Mpc**3   6.4249999999999865E-128
+ done
+ ************************
+ AGNs: Processing redshift  0.20000000298023224       Range  0.17500000447034836       0.22500000149011612     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z0.20.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z0.20.txt                                                                                                                      
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   31.9001293       31.9001293    
+ sizes ends
+ dark mass starts
+ dark mass ends
+ coordinates
+   6.12300411E-02   6.12300411E-02
+   9.64683294E-02   9.64683294E-02
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   17.8307743       21.8731480    
+ sizes ends
+ dark mass starts
+ herg/lerg samples:                    3                    0                    3
+ dark mass ends
+ coordinates
+ -0.517656267      0.300698817    
+  -3.60581502E-02  0.196150765    
+ ************************
+ SFGs: Processing redshift  0.20000000298023224       Range  0.17500000447034836       0.22500000149011612     
+ ************************
+ volume=   49127.229208072946     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z0.20.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z0.20.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z0.20.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   2.1849207868377663E-003
+ resize buffer
+ Number of galaxies above flux limit                  110
+ resize final flux 
+ SFRs and flux generated
+ number of spheroids galaxies for Mpc**3   6.1749999999999874E-128
+ number of lens_sphergalaxies for Mpc**3   6.1749999999999874E-128
+ done
+ ************************
+ AGNs: Processing redshift  0.25000000000000000       Range  0.22500000149011612       0.27500000596046448     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z0.25.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z0.25.txt                                                                                                                      
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   19.2386837       19.2386837    
+ sizes ends
+ dark mass starts
+ dark mass ends
+ coordinates
+   6.70339093E-02   6.70339093E-02
+  -7.92649947E-03  -7.92649947E-03
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   13.9510536       13.9510536    
+ sizes ends
+ dark mass starts
+ dark mass ends
+ coordinates
+  0.344418585      0.344418585    
+  -3.72079620E-03  -3.72079620E-03
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax  0.606998205       72.3352890    
+ sizes ends
+ dark mass starts
+ herg/lerg samples:                    4                    0                    4
+ dark mass ends
+ coordinates
+ -0.231810883      0.209170923    
+ -0.369470567      0.506691694    
+ ************************
+ SFGs: Processing redshift  0.25000000000000000       Range  0.22500000149011612       0.27500000596046448     
+ ************************
+ volume=   72551.480202713836     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z0.25.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z0.25.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z0.25.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   1.4949827227607503E-003
+ resize buffer
+ Number of galaxies above flux limit                  114
+ resize final flux 
+ SFRs and flux generated
+ number of spheroids galaxies for Mpc**3   5.9749999999999880E-128
+ number of lens_sphergalaxies for Mpc**3   5.9749999999999880E-128
+ done
+ ************************
+ AGNs: Processing redshift  0.30000001192092896       Range  0.27500000596046448       0.32500000298023224     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z0.30.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z0.30.txt                                                                                                                      
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   22.4543934       343.834106    
+ sizes ends
+ dark mass starts
+ herg/lerg samples:                    3                    0                    3
+ dark mass ends
+ coordinates
+ -0.439055443     -0.367378980    
+  0.196874246      0.513464332    
+ ************************
+ SFGs: Processing redshift  0.30000001192092896       Range  0.27500000596046448       0.32500000298023224     
+ ************************
+ volume=   98714.333491834186     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z0.30.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z0.30.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z0.30.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   9.6003429859566340E-004
+ resize buffer
+ Number of galaxies above flux limit                   87
+ resize final flux 
+ SFRs and flux generated
+ number of spheroids galaxies for Mpc**3   5.7749999999999885E-128
+ number of lens_sphergalaxies for Mpc**3   5.7749999999999885E-128
+ done
+ ************************
+ AGNs: Processing redshift  0.34999999403953552       Range  0.32500000298023224       0.37500000000000000     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z0.35.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z0.35.txt                                                                                                                      
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax  0.708001852       32.7319145    
+ sizes ends
+ dark mass starts
+ dark mass ends
+ coordinates
+ -0.491691589      0.104531765    
+ -0.359404922      0.216340393    
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   21.1575356       749.155151    
+ sizes ends
+ dark mass starts
+ herg/lerg samples:                    6                    0                    6
+ dark mass ends
+ coordinates
+ -0.479648501      0.516447127    
+ -0.421605766      0.449508131    
+ ************************
+ SFGs: Processing redshift  0.34999999403953552       Range  0.32500000298023224       0.37500000000000000     
+ ************************
+ volume=   126887.48549535585     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z0.35.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z0.35.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z0.35.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   8.0234099410104521E-004
+ resize buffer
+ Number of galaxies above flux limit                   80
+ resize final flux 
+ SFRs and flux generated
+ number of spheroids galaxies for Mpc**3   5.6249999999999897E-128
+ number of lens_sphergalaxies for Mpc**3   5.6249999999999897E-128
+ done
+ ************************
+ AGNs: Processing redshift  0.40000000596046448       Range  0.37500000000000000       0.42499999701976776     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z0.40.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z0.40.txt                                                                                                                      
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   0.00000000       524.396545    
+ sizes ends
+ dark mass starts
+ herg/lerg samples:                    9                    0                    9
+ dark mass ends
+ coordinates
+ -0.459253073      0.250965863    
+ -0.484854311      0.443019569    
+ ************************
+ SFGs: Processing redshift  0.40000000596046448       Range  0.37500000000000000       0.42499999701976776     
+ ************************
+ volume=   156431.37276863973     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z0.40.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z0.40.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z0.40.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   5.5342605024843192E-004
+ resize buffer
+ Number of galaxies above flux limit                   74
+ resize final flux 
+ SFRs and flux generated
+ number of spheroids galaxies for Mpc**3   5.5249999999999904E-128
+ number of lens_sphergalaxies for Mpc**3   5.5249999999999904E-128
+ done
+ ************************
+ AGNs: Processing redshift  0.44999998807907104       Range  0.42499999701976776       0.47499999403953552     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z0.45.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z0.45.txt                                                                                                                      
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax  0.653761625       5.04903078    
+ sizes ends
+ dark mass starts
+ dark mass ends
+ coordinates
+ -0.404413223       2.37930175E-02
+ -0.319727868     -0.156594619    
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   7.13920689       7.13920689    
+ sizes ends
+ dark mass starts
+ dark mass ends
+ coordinates
+ -0.117289566     -0.117289566    
+ -0.434319526     -0.434319526    
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax  0.682525635       258.382660    
+ sizes ends
+ dark mass starts
+ herg/lerg samples:                    9                    2                    7
+ dark mass ends
+ coordinates
+ -0.522419274      0.313997597    
+ -0.513406754      0.480046779    
+ ************************
+ SFGs: Processing redshift  0.44999998807907104       Range  0.42499999701976776       0.47499999403953552     
+ ************************
+ volume=   186793.21517361034     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z0.45.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z0.45.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z0.45.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   4.4269067050799698E-004
+ resize buffer
+ Number of galaxies above flux limit                   95
+ resize final flux 
+ SFRs and flux generated
+ number of spheroids galaxies for Mpc**3   5.4249999999999902E-128
+ number of lens_sphergalaxies for Mpc**3   5.4249999999999902E-128
+ done
+ ************************
+ AGNs: Processing redshift  0.50000000000000000       Range  0.47499999403953552       0.52500000596046448     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z0.50.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z0.50.txt                                                                                                                      
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   117.714821       117.714821    
+ sizes ends
+ dark mass starts
+ dark mass ends
+ coordinates
+ -0.224222839     -0.224222839    
+  -5.95117100E-02  -5.95117100E-02
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   7.74259186       531.966431    
+ sizes ends
+ dark mass starts
+ herg/lerg samples:                    5                    0                    5
+ dark mass ends
+ coordinates
+ -0.329752207      0.518966794    
+ -0.355696887      0.265624732    
+ ************************
+ SFGs: Processing redshift  0.50000000000000000       Range  0.47499999403953552       0.52500000596046448     
+ ************************
+ volume=   217502.74235309329     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z0.50.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z0.50.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z0.50.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   3.4729730292949469E-004
+ resize buffer
+ Number of galaxies above flux limit                   71
+ resize final flux 
+ SFRs and flux generated
+ number of spheroids galaxies for Mpc**3   5.3249999999999910E-128
+ number of lens_sphergalaxies for Mpc**3   5.3249999999999910E-128
+ done
+ ************************
+ AGNs: Processing redshift  0.55000001192092896       Range  0.52500000596046448       0.57500001788139343     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z0.55.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z0.55.txt                                                                                                                      
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax  0.769952536       693.569092    
+ sizes ends
+ dark mass starts
+ herg/lerg samples:                   10                    1                    9
+ dark mass ends
+ coordinates
+ -0.447941750      0.476666689    
+ -0.322122604      0.450102925    
+ ************************
+ SFGs: Processing redshift  0.55000001192092896       Range  0.52500000596046448       0.57500001788139343     
+ ************************
+ volume=   248165.99955166687     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z0.55.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z0.55.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z0.55.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   2.6683669335619652E-004
+ resize buffer
+ Number of galaxies above flux limit                   55
+ resize final flux 
+ SFRs and flux generated
+ number of spheroids galaxies for Mpc**3   5.2249999999999917E-128
+ number of lens_sphergalaxies for Mpc**3   5.2249999999999917E-128
+ done
+ ************************
+ AGNs: Processing redshift  0.60000002384185791       Range  0.57500001788139343       0.62500000000000000     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z0.60.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z0.60.txt                                                                                                                      
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax  0.876396894      0.876396894    
+ sizes ends
+ dark mass starts
+ dark mass ends
+ coordinates
+ -0.413451731     -0.413451731    
+   1.72917005E-02   1.72917005E-02
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   1.62584662       226.959442    
+ sizes ends
+ dark mass starts
+ herg/lerg samples:                   12                    1                   11
+ dark mass ends
+ coordinates
+ -0.513474882      0.520291865    
+ -0.504945815      0.467765868    
+ ************************
+ SFGs: Processing redshift  0.60000002384185791       Range  0.57500001788139343       0.62500000000000000     
+ ************************
+ volume=   278458.62733364134     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z0.60.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z0.60.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z0.60.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   2.0048583126517684E-004
+ resize buffer
+ Number of galaxies above flux limit                   58
+ resize final flux 
+ SFRs and flux generated
+ number of spheroids galaxies for Mpc**3   5.1249999999999915E-128
+ number of lens_sphergalaxies for Mpc**3   5.1249999999999915E-128
+ done
+ ************************
+ AGNs: Processing redshift  0.64999997615814209       Range  0.62500000000000000       0.67499998211860657     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z0.65.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z0.65.txt                                                                                                                      
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   33.3926773       33.3926773    
+ sizes ends
+ dark mass starts
+ dark mass ends
+ coordinates
+  -4.03865203E-02  -4.03865203E-02
+ -0.475545436     -0.475545436    
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   4.79469395       813.484985    
+ sizes ends
+ dark mass starts
+ herg/lerg samples:                   15                    4                   11
+ dark mass ends
+ coordinates
+ -0.459742993      0.501609266    
+ -0.451589704      0.515313089    
+ ************************
+ SFGs: Processing redshift  0.64999997615814209       Range  0.62500000000000000       0.67499998211860657     
+ ************************
+ volume=   308118.93835160276     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z0.65.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z0.65.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z0.65.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   1.8667501043871426E-004
+ resize buffer
+ Number of galaxies above flux limit                   49
+ resize final flux 
+ SFRs and flux generated
+ number of spheroids galaxies for Mpc**3   5.0749999999999919E-128
+ number of lens_sphergalaxies for Mpc**3   5.0749999999999919E-128
+ done
+ ************************
+ AGNs: Processing redshift  0.69999998807907104       Range  0.67499998211860657       0.72499999403953552     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z0.70.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z0.70.txt                                                                                                                      
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   25.0945587       25.0945587    
+ sizes ends
+ dark mass starts
+ dark mass ends
+ coordinates
+  0.184726521      0.184726521    
+ -0.149557576     -0.149557576    
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   12.4531555       1273.32544    
+ sizes ends
+ dark mass starts
+ herg/lerg samples:                   20                    4                   16
+ dark mass ends
+ coordinates
+ -0.503961742      0.398785591    
+ -0.507094979      0.450453907    
+ ************************
+ SFGs: Processing redshift  0.69999998807907104       Range  0.67499998211860657       0.72499999403953552     
+ ************************
+ volume=   336939.80728632479     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z0.70.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z0.70.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z0.70.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   1.3554880991953922E-004
+ resize buffer
+ Number of galaxies above flux limit                   41
+ resize final flux 
+ SFRs and flux generated
+ number of spheroids galaxies for Mpc**3   4.9749999999999926E-128
+ number of lens_sphergalaxies for Mpc**3   5.0249999999999923E-128
+ done
+ ************************
+ AGNs: Processing redshift  0.75000000000000000       Range  0.72499999403953552       0.77500000596046448     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z0.75.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z0.75.txt                                                                                                                      
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   12.4873934       882.569336    
+ sizes ends
+ dark mass starts
+ herg/lerg samples:                    9                    1                    8
+ dark mass ends
+ coordinates
+ -0.441979647      0.512049913    
+ -0.490879983      0.397952437    
+ ************************
+ SFGs: Processing redshift  0.75000000000000000       Range  0.72499999403953552       0.77500000596046448     
+ ************************
+ volume=   364761.25879257655     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z0.75.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z0.75.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z0.75.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   1.2410849387666702E-004
+ resize buffer
+ Number of galaxies above flux limit                   41
+ resize final flux 
+ SFRs and flux generated
+ number of spheroids galaxies for Mpc**3   4.9249999999999920E-128
+ number of lens_sphergalaxies for Mpc**3   4.9249999999999920E-128
+ done
+ ************************
+ AGNs: Processing redshift  0.80000001192092896       Range  0.77500000596046448       0.82500001788139343     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z0.80.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z0.80.txt                                                                                                                      
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax  0.310295820       19.8223190    
+ sizes ends
+ dark mass starts
+ dark mass ends
+ coordinates
+  0.150389954      0.367208749    
+ -0.220730096      0.377803624    
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   12.6507397       890.880371    
+ sizes ends
+ dark mass starts
+ herg/lerg samples:                   14                    3                   11
+ dark mass ends
+ coordinates
+ -0.462168783      0.412771285    
+ -0.473905444      0.349489212    
+ ************************
+ SFGs: Processing redshift  0.80000001192092896       Range  0.77500000596046448       0.82500001788139343     
+ ************************
+ volume=   391464.71024218295     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z0.80.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z0.80.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z0.80.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   1.1288071064944271E-004
+ resize buffer
+ Number of galaxies above flux limit                   47
+ resize final flux 
+ SFRs and flux generated
+ number of spheroids galaxies for Mpc**3   4.8249999999999928E-128
+ number of lens_sphergalaxies for Mpc**3   4.8249999999999928E-128
+ done
+ ************************
+ AGNs: Processing redshift  0.85000002384185791       Range  0.82500001788139343       0.87500000000000000     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z0.85.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z0.85.txt                                                                                                                      
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   6.69289351       31.7964897    
+ sizes ends
+ dark mass starts
+ dark mass ends
+ coordinates
+ -0.162763491      0.371236980    
+ -0.312321067      0.282235026    
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   3.81963563       272.108368    
+ sizes ends
+ dark mass starts
+ herg/lerg samples:                   10                    3                    7
+ dark mass ends
+ coordinates
+ -0.448451430      0.503532887    
+ -0.473756254      0.505524337    
+ ************************
+ SFGs: Processing redshift  0.85000002384185791       Range  0.82500001788139343       0.87500000000000000     
+ ************************
+ volume=   416965.75362516876     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z0.85.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z0.85.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z0.85.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   1.0197537455898757E-004
+ resize buffer
+ Number of galaxies above flux limit                   33
+ resize final flux 
+ SFRs and flux generated
+ number of spheroids galaxies for Mpc**3   4.8249999999999928E-128
+ number of lens_sphergalaxies for Mpc**3   4.8249999999999928E-128
+ done
+ ************************
+ AGNs: Processing redshift  0.89999997615814209       Range  0.87500000000000000       0.92499998211860657     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z0.90.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z0.90.txt                                                                                                                      
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   4.96816254       387.993073    
+ sizes ends
+ dark mass starts
+ herg/lerg samples:                    9                    1                    8
+ dark mass ends
+ coordinates
+ -0.388441294      0.308836848    
+ -0.346426815      0.472923130    
+ ************************
+ SFGs: Processing redshift  0.89999997615814209       Range  0.87500000000000000       0.92499998211860657     
+ ************************
+ volume=   441209.70943201671     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z0.90.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z0.90.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z0.90.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   9.1482013969881800E-005
+ resize buffer
+ Number of galaxies above flux limit                   39
+ resize final flux 
+ SFRs and flux generated
+ number of spheroids galaxies for Mpc**3   4.7249999999999936E-128
+ number of lens_sphergalaxies for Mpc**3   4.7249999999999936E-128
+ done
+ ************************
+ AGNs: Processing redshift  0.94999998807907104       Range  0.92499998211860657       0.97499999403953552     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z0.95.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z0.95.txt                                                                                                                      
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   2.82421350       98.6590118    
+ sizes ends
+ dark mass starts
+ herg/lerg samples:                    7                    0                    7
+ dark mass ends
+ coordinates
+ -0.400563002      0.392987967    
+ -0.253801703      0.451193154    
+ ************************
+ SFGs: Processing redshift  0.94999998807907104       Range  0.92499998211860657       0.97499999403953552     
+ ************************
+ volume=   464165.47475725150     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z0.95.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z0.95.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z0.95.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   6.1671412348523341E-005
+ resize buffer
+ Number of galaxies above flux limit                   30
+ resize final flux 
+ SFRs and flux generated
+ number of spheroids galaxies for Mpc**3   4.6749999999999929E-128
+ number of lens_sphergalaxies for Mpc**3   4.7249999999999936E-128
+ done
+ ************************
+ AGNs: Processing redshift   1.0000000000000000       Range  0.97499999403953552        1.1000000238418579     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z1.00.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z1.00.txt                                                                                                                      
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   7.21095467       10.9375334    
+ sizes ends
+ dark mass starts
+ dark mass ends
+ coordinates
+   7.45686283E-03  0.328592628    
+ -0.342037380      0.379068851    
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   2.11422563       5.07093525    
+ sizes ends
+ dark mass starts
+ dark mass ends
+ coordinates
+  -8.66522640E-02  0.285675436    
+ -0.300694793      -1.22483615E-02
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax  0.446238518       1067.78906    
+ sizes ends
+ dark mass starts
+ herg/lerg samples:                   22                    5                   17
+ dark mass ends
+ coordinates
+ -0.492901713      0.524357617    
+ -0.522652566      0.457057118    
+ ************************
+ SFGs: Processing redshift   1.0000000000000000       Range  0.97499999403953552        1.1000000238418579     
+ ************************
+ volume=   1252326.5767436214     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z1.00.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z1.00.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z1.00.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   5.4180850510811023E-005
+ resize buffer
+ Number of galaxies above flux limit                   74
+ resize final flux 
+ SFRs and flux generated
+ number of spheroids galaxies for Mpc**3   1.5634239203336437E-007
+ number of lens_sphergalaxies for Mpc**3   9.5497708934097752E-009
+ done
+ ************************
+ AGNs: Processing redshift   1.2000000476837158       Range   1.1000000238418579        1.3000000119209290     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z1.20.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z1.20.txt                                                                                                                      
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   6.93031549       34.6970139    
+ sizes ends
+ dark mass starts
+ dark mass ends
+ coordinates
+ -0.509016573      0.416882128    
+ -0.417804360      0.368142515    
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   19.2272835       19.2272835    
+ sizes ends
+ dark mass starts
+ dark mass ends
+ coordinates
+  -3.32578532E-02  -3.32578532E-02
+ -0.362208962     -0.362208962    
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   1.80860281       980.344299    
+ sizes ends
+ dark mass starts
+ herg/lerg samples:                   43                   13                   30
+ dark mass ends
+ coordinates
+ -0.516388059      0.502191544    
+ -0.523219585      0.508950472    
+ ************************
+ SFGs: Processing redshift   1.2000000476837158       Range   1.1000000238418579        1.3000000119209290     
+ ************************
+ volume=   2235866.1486687283     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z1.20.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z1.20.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z1.20.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   2.0447818359691291E-005
+ resize buffer
+ Number of galaxies above flux limit                   29
+ resize final flux 
+ SFRs and flux generated
+ number of spheroids galaxies for Mpc**3   1.5719747042617692E-008
+ number of lens_sphergalaxies for Mpc**3   2.2998114707588684E-008
+ done
+ ************************
+ AGNs: Processing redshift   1.3999999761581421       Range   1.3000000119209290        1.5000000000000000     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z1.40.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z1.40.txt                                                                                                                      
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax  0.564957857       30.5831108    
+ sizes ends
+ dark mass starts
+ dark mass ends
+ coordinates
+ -0.247265846      0.486793190    
+ -0.412472397      0.106660403    
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   6.58881092       6.58881092    
+ sizes ends
+ dark mass starts
+ dark mass ends
+ coordinates
+ -0.192187637     -0.192187637    
+ -0.297607362     -0.297607362    
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax  0.541042089       951.608643    
+ sizes ends
+ dark mass starts
+ herg/lerg samples:                   34                   10                   24
+ dark mass ends
+ coordinates
+ -0.459861398      0.521919847    
+ -0.510640264      0.502265692    
+ ************************
+ SFGs: Processing redshift   1.3999999761581421       Range   1.3000000119209290        1.5000000000000000     
+ ************************
+ volume=   2456819.6197580998     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z1.40.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z1.40.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z1.40.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   4.0593345479438161E-006
+ resize buffer
+ Number of galaxies above flux limit                    7
+ resize final flux 
+ SFRs and flux generated
+ number of spheroids galaxies for Mpc**3   4.4386603084648713E-005
+ resize buffer
+ Number of galaxies above flux limit                   80
+ resize final flux 
+ SFRs and flux generated
+ number of lens_sphergalaxies for Mpc**3   1.5470080243553794E-007
+ done
+ ************************
+ AGNs: Processing redshift   1.6000000238418579       Range   1.5000000000000000        1.6999999880790710     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z1.60.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z1.60.txt                                                                                                                      
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   0.00000000       19.2993984    
+ sizes ends
+ dark mass starts
+ dark mass ends
+ coordinates
+ -0.488986164      0.468112111    
+  -8.85611027E-02  0.386464119    
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   2.62385845       680.050964    
+ sizes ends
+ dark mass starts
+ herg/lerg samples:                   32                   16                   16
+ dark mass ends
+ coordinates
+ -0.498263240      0.473702192    
+ -0.502879739      0.507633448    
+ ************************
+ SFGs: Processing redshift   1.6000000238418579       Range   1.5000000000000000        1.6999999880790710     
+ ************************
+ volume=   2614448.2586203683     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z1.60.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z1.60.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z1.60.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   1.0640159329355537E-006
+ resize buffer
+ Number of galaxies above flux limit                    2
+ resize final flux 
+ SFRs and flux generated
+ number of spheroids galaxies for Mpc**3   4.2333957583335559E-005
+ resize buffer
+ Number of galaxies above flux limit                  106
+ resize final flux 
+ SFRs and flux generated
+ number of lens_sphergalaxies for Mpc**3   2.5116577386857073E-007
+ done
+ ************************
+ AGNs: Processing redshift   1.7999999523162842       Range   1.6999999880790710        1.8999999761581421     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z1.80.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z1.80.txt                                                                                                                      
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   17.6473255       30.3556671    
+ sizes ends
+ dark mass starts
+ dark mass ends
+ coordinates
+ -0.436343759      0.351608604    
+ -0.427081704       8.91932100E-02
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   3.73746037       514.551636    
+ sizes ends
+ dark mass starts
+ herg/lerg samples:                   19                   13                    6
+ dark mass ends
+ coordinates
+ -0.499941528      0.426915228    
+ -0.524143577      0.517586946    
+ ************************
+ SFGs: Processing redshift   1.7999999523162842       Range   1.6999999880790710        1.8999999761581421     
+ ************************
+ volume=   2720853.5079771052     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z1.80.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z1.80.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z1.80.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   7.4895316967382834E-008
+ number of spheroids galaxies for Mpc**3   3.0822589856113915E-005
+ resize buffer
+ Number of galaxies above flux limit                   80
+ resize final flux 
+ SFRs and flux generated
+ number of lens_sphergalaxies for Mpc**3   2.5642513167588766E-007
+ done
+ ************************
+ AGNs: Processing redshift   2.0000000000000000       Range   1.8999999761581421        2.1000000238418579     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z2.00.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z2.00.txt                                                                                                                      
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   12.9644823       34.4164925    
+ sizes ends
+ dark mass starts
+ dark mass ends
+ coordinates
+ -0.476564825      0.485018283    
+ -0.496156126      0.325067341    
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   2.16516972       907.866577    
+ sizes ends
+ dark mass starts
+ herg/lerg samples:                   15                   11                    4
+ dark mass ends
+ coordinates
+ -0.369532645      0.494101346    
+ -0.469675481      0.487944245    
+ ************************
+ SFGs: Processing redshift   2.0000000000000000       Range   1.8999999761581421        2.1000000238418579     
+ ************************
+ volume=   2786885.9511412610     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z2.00.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z2.00.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z2.00.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   1.9680221932197298E-009
+ number of spheroids galaxies for Mpc**3   2.3875484465886273E-005
+ resize buffer
+ Number of galaxies above flux limit                   63
+ resize final flux 
+ SFRs and flux generated
+ number of lens_sphergalaxies for Mpc**3   2.6673925321517602E-007
+ resize buffer
+ Number of galaxies above flux limit                    2
+ resize final flux 
+ SFRs and flux generated
+ done
+ ************************
+ AGNs: Processing redshift   2.2000000476837158       Range   2.1000000238418579        2.3000000715255737     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z2.20.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z2.20.txt                                                                                                                      
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   18.6875019       32.1626015    
+ sizes ends
+ dark mass starts
+ dark mass ends
+ coordinates
+  -4.26318161E-02  0.505344331    
+ -0.411964446      0.130192071    
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   23.8431530       23.8431530    
+ sizes ends
+ dark mass starts
+ dark mass ends
+ coordinates
+ -0.492173493     -0.492173493    
+  -5.80677502E-02  -5.80677502E-02
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   21.6604080       329.273712    
+ sizes ends
+ dark mass starts
+ herg/lerg samples:                    3                    2                    1
+ dark mass ends
+ coordinates
+   9.43048969E-02  0.121898070    
+ -0.517231941      0.192986473    
+ ************************
+ SFGs: Processing redshift   2.2000000476837158       Range   2.1000000238418579        2.3000000715255737     
+ ************************
+ volume=   2821611.1292340565     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z2.20.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z2.20.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z2.20.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   1.0826532228231076E-011
+ number of spheroids galaxies for Mpc**3   2.0698038129783379E-005
+ resize buffer
+ Number of galaxies above flux limit                   54
+ resize final flux 
+ SFRs and flux generated
+ number of lens_sphergalaxies for Mpc**3   2.5202681067803419E-007
+ resize buffer
+ Number of galaxies above flux limit                    1
+ resize final flux 
+ SFRs and flux generated
+ done
+ ************************
+ AGNs: Processing redshift   2.4000000953674316       Range   2.3000000715255737        2.5000000000000000     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z2.40.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z2.40.txt                                                                                                                      
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   31.7144527       31.7144527    
+ sizes ends
+ dark mass starts
+ dark mass ends
+ coordinates
+ -0.168764383     -0.168764383    
+ -0.370985389     -0.370985389    
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   6.29664803       1052.50464    
+ sizes ends
+ dark mass starts
+ herg/lerg samples:                   15                   11                    4
+ dark mass ends
+ coordinates
+ -0.524325848      0.378502578    
+ -0.455719292      0.515148878    
+ ************************
+ SFGs: Processing redshift   2.4000000953674316       Range   2.3000000715255737        2.5000000000000000     
+ ************************
+ volume=   2832335.8424480325     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z2.40.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z2.40.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z2.40.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   4.4021710612799005E-016
+ number of spheroids galaxies for Mpc**3   1.3209589164636755E-005
+ resize buffer
+ Number of galaxies above flux limit                   31
+ resize final flux 
+ SFRs and flux generated
+ number of lens_sphergalaxies for Mpc**3   2.5275084913229823E-007
+ resize buffer
+ Number of galaxies above flux limit                    2
+ resize final flux 
+ SFRs and flux generated
+ done
+ ************************
+ AGNs: Processing redshift   2.5999999046325684       Range   2.5000000000000000        2.6999999284744263     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z2.60.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z2.60.txt                                                                                                                      
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   7.38672638       69.3863983    
+ sizes ends
+ dark mass starts
+ dark mass ends
+ coordinates
+ -0.340609938     -0.157897636    
+ -0.433114141      -3.06976326E-02
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   3.27667713       104.845459    
+ sizes ends
+ dark mass starts
+ herg/lerg samples:                    4                    4                    0
+ dark mass ends
+ coordinates
+ -0.466385007      0.244186670    
+ -0.404179633      0.434804916    
+ ************************
+ SFGs: Processing redshift   2.5999999046325684       Range   2.5000000000000000        2.6999999284744263     
+ ************************
+ volume=   2824837.6902903719     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z2.60.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z2.60.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z2.60.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   2.2084013924406228E-021
+ number of spheroids galaxies for Mpc**3   7.5669109002456282E-006
+ resize buffer
+ Number of galaxies above flux limit                   17
+ resize final flux 
+ SFRs and flux generated
+ number of lens_sphergalaxies for Mpc**3   2.0394150513978137E-007
+ resize buffer
+ Number of galaxies above flux limit                    1
+ resize final flux 
+ SFRs and flux generated
+ done
+ ************************
+ AGNs: Processing redshift   2.7999999523162842       Range   2.6999999284744263        2.8999999761581421     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z2.80.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z2.80.txt                                                                                                                      
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   16.0784130       27.9563065    
+ sizes ends
+ dark mass starts
+ dark mass ends
+ coordinates
+ -0.453694552     -0.131369919    
+ -0.143079296      0.217138737    
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   25.9266453       321.716400    
+ sizes ends
+ dark mass starts
+ herg/lerg samples:                    5                    5                    0
+ dark mass ends
+ coordinates
+ -0.384285152       8.88309702E-02
+ -0.128200859      0.382974893    
+ ************************
+ SFGs: Processing redshift   2.7999999523162842       Range   2.6999999284744263        2.8999999761581421     
+ ************************
+ volume=   2803629.3973120870     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z2.80.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z2.80.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z2.80.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   1.9742408760755173E-030
+ number of spheroids galaxies for Mpc**3   5.1931422011834965E-006
+ resize buffer
+ Number of galaxies above flux limit                   12
+ resize final flux 
+ SFRs and flux generated
+ number of lens_sphergalaxies for Mpc**3   1.5229711009162687E-007
+ done
+ ************************
+ AGNs: Processing redshift   3.0000000000000000       Range   2.8999999761581421        3.1000000238418579     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z3.00.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z3.00.txt                                                                                                                      
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   22.2606983       34.6353874    
+ sizes ends
+ dark mass starts
+ dark mass ends
+ coordinates
+ -0.401446700       5.39166220E-02
+   2.97633652E-02  0.188462839    
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   3.61727238       124.303139    
+ sizes ends
+ dark mass starts
+ herg/lerg samples:                    5                    5                    0
+ dark mass ends
+ coordinates
+ -0.369296074      0.364441007    
+ -0.343378186      0.512366593    
+ ************************
+ SFGs: Processing redshift   3.0000000000000000       Range   2.8999999761581421        3.1000000238418579     
+ ************************
+ volume=   2772213.3073829976     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z3.00.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z3.00.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z3.00.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   1.6132600668943176E-043
+ number of spheroids galaxies for Mpc**3   2.4248332135799772E-006
+ resize buffer
+ Number of galaxies above flux limit                    4
+ resize final flux 
+ SFRs and flux generated
+ number of lens_sphergalaxies for Mpc**3   1.5259440289803690E-007
+ resize buffer
+ Number of galaxies above flux limit                    2
+ resize final flux 
+ SFRs and flux generated
+ done
+ ************************
+ AGNs: Processing redshift   3.2000000476837158       Range   3.1000000238418579        3.3000000715255737     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z3.20.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z3.20.txt                                                                                                                      
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   11.7352066       23.6602039    
+ sizes ends
+ dark mass starts
+ dark mass ends
+ coordinates
+  0.127285868      0.333736360    
+   8.25119019E-03  0.444303811    
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   6.24908352       250.444641    
+ sizes ends
+ dark mass starts
+ herg/lerg samples:                    3                    3                    0
+ dark mass ends
+ coordinates
+ -0.386153698      0.383351147    
+ -0.483512729      0.186451867    
+ ************************
+ SFGs: Processing redshift   3.2000000476837158       Range   3.1000000238418579        3.3000000715255737     
+ ************************
+ volume=   2733305.7685826533     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z3.20.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z3.20.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z3.20.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   5.9456298625741905E-128
+ number of spheroids galaxies for Mpc**3   2.0221660747898085E-006
+ resize buffer
+ Number of galaxies above flux limit                    6
+ resize final flux 
+ SFRs and flux generated
+ number of lens_sphergalaxies for Mpc**3   1.0190714849258695E-007
+ done
+ ************************
+ AGNs: Processing redshift   3.4000000953674316       Range   3.3000000715255737        3.5000000000000000     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z3.40.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z3.40.txt                                                                                                                      
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   18.9707699       18.9707699    
+ sizes ends
+ dark mass starts
+ dark mass ends
+ coordinates
+ -0.428279072     -0.428279072    
+ -0.334384233     -0.334384233    
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   2.44462371       178.634216    
+ sizes ends
+ dark mass starts
+ herg/lerg samples:                    2                    2                    0
+ dark mass ends
+ coordinates
+  -7.20777512E-02  0.481835216    
+ -0.444511086      0.291113317    
+ ************************
+ SFGs: Processing redshift   3.4000000953674316       Range   3.3000000715255737        3.5000000000000000     
+ ************************
+ volume=   2689003.6862748144     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z3.40.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z3.40.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z3.40.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   5.7824256833579824E-128
+ number of spheroids galaxies for Mpc**3   1.1555700161621861E-006
+ resize buffer
+ Number of galaxies above flux limit                    3
+ resize final flux 
+ SFRs and flux generated
+ number of lens_sphergalaxies for Mpc**3   7.8417196756753863E-008
+ done
+ ************************
+ AGNs: Processing redshift   3.5999999046325684       Range   3.5000000000000000        3.6999999284744263     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z3.60.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z3.60.txt                                                                                                                      
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   8.86599064       8.86599064    
+ sizes ends
+ dark mass starts
+ dark mass ends
+ coordinates
+  -2.38012783E-02  -2.38012783E-02
+   2.47087590E-02   2.47087590E-02
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   492.921539       522.624023    
+ sizes ends
+ dark mass starts
+ herg/lerg samples:                    2                    2                    0
+ dark mass ends
+ coordinates
+ -0.245804861      0.416571438    
+  -8.06784183E-02  0.508325398    
+ ************************
+ SFGs: Processing redshift   3.5999999046325684       Range   3.5000000000000000        3.6999999284744263     
+ ************************
+ volume=   2640930.7756018238     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z3.60.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z3.60.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z3.60.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   5.7006841736925614E-128
+ number of spheroids galaxies for Mpc**3   6.2030307757382518E-007
+ Number of galaxies above flux limit                    0
+ number of lens_sphergalaxies for Mpc**3   5.8170675307134574E-008
+ done
+ ************************
+ AGNs: Processing redshift   3.7999999523162842       Range   3.6999999284744263        3.8999999761581421     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z3.80.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z3.80.txt                                                                                                                      
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   16.6885910       16.6885910    
+ sizes ends
+ dark mass starts
+ dark mass ends
+ coordinates
+  -1.74251311E-02  -1.74251311E-02
+   8.60274211E-02   8.60274211E-02
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   31.7010174       31.7010174    
+ sizes ends
+ dark mass starts
+ herg/lerg samples:                    1                    1                    0
+ dark mass ends
+ coordinates
+ -0.183147639     -0.183147639    
+  0.441579372      0.441579372    
+ ************************
+ SFGs: Processing redshift   3.7999999523162842       Range   3.6999999284744263        3.8999999761581421     
+ ************************
+ volume=   2590337.0639657532     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z3.80.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z3.80.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z3.80.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   5.6188510546778229E-128
+ number of spheroids galaxies for Mpc**3   3.1354775112339798E-007
+ resize buffer
+ Number of galaxies above flux limit                    1
+ resize final flux 
+ SFRs and flux generated
+ number of lens_sphergalaxies for Mpc**3   5.2196656531696561E-008
+ done
+ ************************
+ AGNs: Processing redshift   4.0000000000000000       Range   3.8999999761581421        4.0999999046325684     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z4.00.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z4.00.txt                                                                                                                      
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   26.8780861       26.8780861    
+ sizes ends
+ dark mass starts
+ dark mass ends
+ coordinates
+  0.450332493      0.450332493    
+  0.339433342      0.339433342    
+ ************************
+ SFGs: Processing redshift   4.0000000000000000       Range   3.8999999761581421        4.0999999046325684     
+ ************************
+ volume=   2538181.0988402274     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z4.00.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z4.00.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z4.00.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   5.6188510546778229E-128
+ number of spheroids galaxies for Mpc**3   1.4786498743025898E-007
+ resize buffer
+ Number of galaxies above flux limit                    1
+ resize final flux 
+ SFRs and flux generated
+ number of lens_sphergalaxies for Mpc**3   2.9098198588612926E-008
+ done
+ ************************
+ AGNs: Processing redshift   4.1999998092651367       Range   4.0999999046325684        4.2999999523162842     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z4.20.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z4.20.txt                                                                                                                      
+ ************************
+ SFGs: Processing redshift   4.1999998092651367       Range   4.0999999046325684        4.2999999523162842     
+ ************************
+ volume=   2485209.5254073748     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z4.20.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z4.20.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z4.20.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   5.4549122528213175E-128
+ number of spheroids galaxies for Mpc**3   6.5395336714143694E-008
+ resize buffer
+ Number of galaxies above flux limit                    1
+ resize final flux 
+ SFRs and flux generated
+ number of lens_sphergalaxies for Mpc**3   2.5089991387755549E-008
+ done
+ ************************
+ AGNs: Processing redshift   4.4000000953674316       Range   4.2999999523162842        4.5000000000000000     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z4.40.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z4.40.txt                                                                                                                      
+ ************************
+ SFGs: Processing redshift   4.4000000953674316       Range   4.2999999523162842        4.5000000000000000     
+ ************************
+ volume=   2431985.3288377891     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z4.40.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z4.40.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z4.40.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   5.4549122528213175E-128
+ number of spheroids galaxies for Mpc**3   2.7091486762847332E-008
+ number of lens_sphergalaxies for Mpc**3   1.6692413786564619E-008
+ ************************
+ AGNs: Processing redshift   4.5999999046325684       Range   4.5000000000000000        4.7000000476837158     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z4.60.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z4.60.txt                                                                                                                      
+ ************************
+ SFGs: Processing redshift   4.5999999046325684       Range   4.5000000000000000        4.7000000476837158     
+ ************************
+ volume=   2378942.9190264810     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z4.60.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z4.60.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z4.60.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   5.3728071471579537E-128
+ number of spheroids galaxies for Mpc**3   1.0494681845738474E-008
+ number of lens_sphergalaxies for Mpc**3   1.4027660545952597E-008
+ ************************
+ AGNs: Processing redshift   4.8000001907348633       Range   4.7000000476837158        4.9000000953674316     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z4.80.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z4.80.txt                                                                                                                      
+ ************************
+ SFGs: Processing redshift   4.8000001907348633       Range   4.7000000476837158        4.9000000953674316     
+ ************************
+ volume=   2326410.1792539619     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z4.80.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z4.80.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z4.80.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   5.2906132969976763E-128
+ number of spheroids galaxies for Mpc**3   3.7102030396609500E-009
+ number of lens_sphergalaxies for Mpc**3   6.8242561168032810E-009
+ ************************
+ AGNs: Processing redshift   5.0000000000000000       Range   4.9000000953674316        5.0999999046325684     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z5.00.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z5.00.txt                                                                                                                      
+ resize final flux 
+ /Users/sgayen/DATA/TRECS_Inputs/LF/AGN_sizes_new.dat                                                                                                                                                    
+ sizes minmax   17.4889183       17.4889183    
+ sizes ends
+ dark mass starts
+ dark mass ends
+ coordinates
+  0.365156978      0.365156978    
+  -5.26491515E-02  -5.26491515E-02
+ ************************
+ SFGs: Processing redshift   5.0000000000000000       Range   4.9000000953674316        5.0999999046325684     
+ ************************
+ volume=   2274630.3191972636     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z5.00.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z5.00.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z5.00.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   5.2906132969976763E-128
+ number of spheroids galaxies for Mpc**3   2.3721937651632317E-009
+ number of lens_sphergalaxies for Mpc**3   5.5670179199058320E-009
+ done
+ ************************
+ AGNs: Processing redshift   5.1999998092651367       Range   5.0999999046325684        5.2999999523162842     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z5.20.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z5.20.txt                                                                                                                      
+ ************************
+ SFGs: Processing redshift   5.1999998092651367       Range   5.0999999046325684        5.2999999523162842     
+ ************************
+ volume=   2223793.2328643254     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z5.20.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z5.20.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z5.20.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   5.2906132969976763E-128
+ number of spheroids galaxies for Mpc**3   7.5632623602341887E-010
+ number of lens_sphergalaxies for Mpc**3   4.5075880197825032E-009
+ ************************
+ AGNs: Processing redshift   5.4000000953674316       Range   5.2999999523162842        5.5000000000000000     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z5.40.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z5.40.txt                                                                                                                      
+ ************************
+ SFGs: Processing redshift   5.4000000953674316       Range   5.2999999523162842        5.5000000000000000     
+ ************************
+ volume=   2174022.4022125779     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z5.40.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z5.40.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z5.40.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   5.2083313926869698E-128
+ number of spheroids galaxies for Mpc**3   4.6324047338550835E-010
+ number of lens_sphergalaxies for Mpc**3   2.6969375180009432E-009
+ resize buffer
+ Number of galaxies above flux limit                    1
+ resize final flux 
+ SFRs and flux generated
+ done
+ ************************
+ AGNs: Processing redshift   5.5999999046325684       Range   5.5000000000000000        5.7000000476837158     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z5.60.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z5.60.txt                                                                                                                      
+ ************************
+ SFGs: Processing redshift   5.5999999046325684       Range   5.5000000000000000        5.7000000476837158     
+ ************************
+ volume=   2125412.9873949746     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z5.60.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z5.60.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z5.60.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   5.1259611919554577E-128
+ number of spheroids galaxies for Mpc**3   1.3335327757024460E-010
+ number of lens_sphergalaxies for Mpc**3   1.5755802100325295E-009
+ ************************
+ AGNs: Processing redshift   5.8000001907348633       Range   5.7000000476837158        5.9000000953674316     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z5.80.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z5.80.txt                                                                                                                      
+ ************************
+ SFGs: Processing redshift   5.8000001907348633       Range   5.7000000476837158        5.9000000953674316     
+ ************************
+ volume=   2078026.7387654483     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z5.80.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z5.80.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z5.80.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   5.0435035835625444E-128
+ number of spheroids galaxies for Mpc**3   7.7948906900782072E-011
+ number of lens_sphergalaxies for Mpc**3   1.2349359845843615E-009
+ ************************
+ AGNs: Processing redshift   6.0000000000000000       Range   5.9000000953674316        6.0999999046325684     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z6.00.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z6.00.txt                                                                                                                      
+ ************************
+ SFGs: Processing redshift   6.0000000000000000       Range   5.9000000953674316        6.0999999046325684     
+ ************************
+ volume=   2031899.0753414081     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z6.00.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z6.00.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z6.00.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   5.0435035835625444E-128
+ number of spheroids galaxies for Mpc**3   2.0163622364941212E-011
+ number of lens_sphergalaxies for Mpc**3   6.9397533243620458E-010
+ ************************
+ AGNs: Processing redshift   6.1999998092651367       Range   6.0999999046325684        6.2999999523162842     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z6.20.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z6.20.txt                                                                                                                      
+ ************************
+ SFGs: Processing redshift   6.1999998092651367       Range   6.0999999046325684        6.2999999523162842     
+ ************************
+ volume=   1987056.4185290113     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z6.20.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z6.20.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z6.20.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   5.0435035835625444E-128
+ number of spheroids galaxies for Mpc**3   1.2752027126207195E-011
+ number of lens_sphergalaxies for Mpc**3   5.4484222907691809E-010
+ ************************
+ AGNs: Processing redshift   6.4000000953674316       Range   6.2999999523162842        6.5000000000000000     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z6.40.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z6.40.txt                                                                                                                      
+ ************************
+ SFGs: Processing redshift   6.4000000953674316       Range   6.2999999523162842        6.5000000000000000     
+ ************************
+ volume=   1943496.2164887225     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z6.40.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z6.40.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z6.40.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   4.9609598356245206E-128
+ number of spheroids galaxies for Mpc**3   3.3672994579334679E-012
+ number of lens_sphergalaxies for Mpc**3   3.0954791583662303E-010
+ ************************
+ AGNs: Processing redshift   6.5999999046325684       Range   6.5000000000000000        6.7000000476837158     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z6.60.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z6.60.txt                                                                                                                      
+ ************************
+ SFGs: Processing redshift   6.5999999046325684       Range   6.5000000000000000        6.7000000476837158     
+ ************************
+ volume=   1901214.5304628303     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z6.60.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z6.60.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z6.60.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   4.9609598356245206E-128
+ number of spheroids galaxies for Mpc**3   2.0619090628159126E-012
+ number of lens_sphergalaxies for Mpc**3   2.4477775351428186E-010
+ ************************
+ AGNs: Processing redshift   6.8000001907348633       Range   6.7000000476837158        6.9000000953674316     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z6.80.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z6.80.txt                                                                                                                      
+ ************************
+ SFGs: Processing redshift   6.8000001907348633       Range   6.7000000476837158        6.9000000953674316     
+ ************************
+ volume=   1860196.4671763792     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z6.80.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z6.80.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z6.80.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   5.0435035835625444E-128
+ number of spheroids galaxies for Mpc**3   1.2362265720955012E-012
+ number of lens_sphergalaxies for Mpc**3   1.3252637134359784E-010
+ ************************
+ AGNs: Processing redshift   7.0000000000000000       Range   6.9000000953674316        7.0999999046325684     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z7.00.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z7.00.txt                                                                                                                      
+ ************************
+ SFGs: Processing redshift   7.0000000000000000       Range   6.9000000953674316        7.0999999046325684     
+ ************************
+ volume=   1820418.5611223464     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z7.00.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z7.00.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z7.00.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   4.9609598356245206E-128
+ number of spheroids galaxies for Mpc**3   7.2357549649972653E-013
+ number of lens_sphergalaxies for Mpc**3   1.4773889948559006E-010
+ ************************
+ AGNs: Processing redshift   7.1999998092651367       Range   7.0999999046325684        7.2999999523162842     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z7.20.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z7.20.txt                                                                                                                      
+ ************************
+ SFGs: Processing redshift   7.1999998092651367       Range   7.0999999046325684        7.2999999523162842     
+ ************************
+ volume=   1781861.2031542226     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z7.20.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z7.20.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z7.20.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   4.9609598356245206E-128
+ number of spheroids galaxies for Mpc**3   4.1810039414359220E-013
+ number of lens_sphergalaxies for Mpc**3   1.1302724375835867E-010
+ ************************
+ AGNs: Processing redshift   7.4000000953674316       Range   7.2999999523162842        7.5000000000000000     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z7.40.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z7.40.txt                                                                                                                      
+ ************************
+ SFGs: Processing redshift   7.4000000953674316       Range   7.2999999523162842        7.5000000000000000     
+ ************************
+ volume=   1744488.2961912986     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z7.40.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z7.40.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z7.40.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   4.9609598356245206E-128
+ number of spheroids galaxies for Mpc**3   8.5831092896110828E-014
+ number of lens_sphergalaxies for Mpc**3   5.8119897091602337E-011
+ ************************
+ AGNs: Processing redshift   7.5999999046325684       Range   7.5000000000000000        7.7000000476837158     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z7.60.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z7.60.txt                                                                                                                      
+ ************************
+ SFGs: Processing redshift   7.5999999046325684       Range   7.5000000000000000        7.7000000476837158     
+ ************************
+ volume=   1708270.0348801913     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z7.60.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z7.60.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z7.60.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   4.9609598356245206E-128
+ number of spheroids galaxies for Mpc**3   4.6712977478377557E-014
+ number of lens_sphergalaxies for Mpc**3   4.3270851605183479E-011
+ ************************
+ AGNs: Processing redshift   7.8000001907348633       Range   7.7000000476837158        7.9000000953674316     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z7.80.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z7.80.txt                                                                                                                      
+ ************************
+ SFGs: Processing redshift   7.8000001907348633       Range   7.7000000476837158        7.9000000953674316     
+ ************************
+ volume=   1673172.8041335300     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z7.80.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z7.80.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z7.80.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   4.9609598356245206E-128
+ number of spheroids galaxies for Mpc**3   7.4404267784340252E-014
+ number of lens_sphergalaxies for Mpc**3   3.1986027703763667E-011
+ ************************
+ AGNs: Processing redshift   8.0000000000000000       Range   7.9000000953674316        8.0999999046325684     
+ ************************
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_LERG_z8.00.txt                                                                                                                      
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_AGNs/AGNprob_HERG_z8.00.txt                                                                                                                      
+ ************************
+ SFGs: Processing redshift   8.0000000000000000       Range   7.9000000953674316        8.0999999046325684     
+ ************************
+ volume=   1639160.0836979377     
+ /Users/sgayen/DATA/TRECS_Inputs/AbundanceMatch/results_LSFR/L2mh_z8.00.txt                                                                                                                              
+ /Users/sgayen/DATA/TRECS_Inputs/results_SFR_Mstar/SFR2mstar_z8.00.txt                                                                                                                                   
+ /Users/sgayen/DATA/TRECS_Inputs/SFRF/SFRF_z8.00.dat                                                                                                                                                     
+ number of UVgal     galaxies for Mpc**3   4.9609598356245206E-128
+ number of spheroids galaxies for Mpc**3   3.9850942799024630E-014
+ number of lens_sphergalaxies for Mpc**3   3.5258000035034335E-011
+ Total clock time [m]:   9.31666698E-03
+                T-RECS > Normal completion
+
+
+2026-09-16 18:25:51,975 [INFO] Running wrapper: /opt/homebrew/bin/trecs -w continuum -p /Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/parameter_file.ini
+=== WRAPPER OUTPUT ===
+ Number of files =           40
+ number of columns in file          32
+ total number of rows                 2250
+ copying catalogue/Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/output/raw_continuum/catalogue_continuum_z0.01.fits
+ copying catalogue/Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/output/raw_continuum/catalogue_continuum_z0.02.fits
+ copying catalogue/Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/output/raw_continuum/catalogue_continuum_z0.05.fits
+ copying catalogue/Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/output/raw_continuum/catalogue_continuum_z0.10.fits
+ copying catalogue/Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/output/raw_continuum/catalogue_continuum_z0.15.fits
+ copying catalogue/Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/output/raw_continuum/catalogue_continuum_z0.20.fits
+ copying catalogue/Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/output/raw_continuum/catalogue_continuum_z0.25.fits
+ copying catalogue/Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/output/raw_continuum/catalogue_continuum_z0.30.fits
+ copying catalogue/Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/output/raw_continuum/catalogue_continuum_z0.35.fits
+ copying catalogue/Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/output/raw_continuum/catalogue_continuum_z0.40.fits
+ copying catalogue/Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/output/raw_continuum/catalogue_continuum_z0.45.fits
+ copying catalogue/Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/output/raw_continuum/catalogue_continuum_z0.50.fits
+ copying catalogue/Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/output/raw_continuum/catalogue_continuum_z0.55.fits
+ copying catalogue/Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/output/raw_continuum/catalogue_continuum_z0.60.fits
+ copying catalogue/Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/output/raw_continuum/catalogue_continuum_z0.65.fits
+ copying catalogue/Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/output/raw_continuum/catalogue_continuum_z0.70.fits
+ copying catalogue/Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/output/raw_continuum/catalogue_continuum_z0.75.fits
+ copying catalogue/Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/output/raw_continuum/catalogue_continuum_z0.80.fits
+ copying catalogue/Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/output/raw_continuum/catalogue_continuum_z0.85.fits
+ copying catalogue/Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/output/raw_continuum/catalogue_continuum_z0.90.fits
+ copying catalogue/Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/output/raw_continuum/catalogue_continuum_z0.95.fits
+ copying catalogue/Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/output/raw_continuum/catalogue_continuum_z1.00.fits
+ copying catalogue/Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/output/raw_continuum/catalogue_continuum_z1.20.fits
+ copying catalogue/Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/output/raw_continuum/catalogue_continuum_z1.40.fits
+ copying catalogue/Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/output/raw_continuum/catalogue_continuum_z1.60.fits
+ copying catalogue/Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/output/raw_continuum/catalogue_continuum_z1.80.fits
+ copying catalogue/Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/output/raw_continuum/catalogue_continuum_z2.00.fits
+ copying catalogue/Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/output/raw_continuum/catalogue_continuum_z2.20.fits
+ copying catalogue/Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/output/raw_continuum/catalogue_continuum_z2.40.fits
+ copying catalogue/Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/output/raw_continuum/catalogue_continuum_z2.60.fits
+ copying catalogue/Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/output/raw_continuum/catalogue_continuum_z2.80.fits
+ copying catalogue/Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/output/raw_continuum/catalogue_continuum_z3.00.fits
+ copying catalogue/Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/output/raw_continuum/catalogue_continuum_z3.20.fits
+ copying catalogue/Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/output/raw_continuum/catalogue_continuum_z3.40.fits
+ copying catalogue/Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/output/raw_continuum/catalogue_continuum_z3.60.fits
+ copying catalogue/Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/output/raw_continuum/catalogue_continuum_z3.80.fits
+ copying catalogue/Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/output/raw_continuum/catalogue_continuum_z4.00.fits
+ copying catalogue/Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/output/raw_continuum/catalogue_continuum_z4.20.fits
+ copying catalogue/Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/output/raw_continuum/catalogue_continuum_z5.00.fits
+ copying catalogue/Users/sgayen/Documents/Work/PSModel/workdir/trecs_tmp_1789563351/output/raw_continuum/catalogue_continuum_z5.40.fits
+ Total clock time [m]:   1.33333335E-04
+                Wrapper > Normal completion
+
+
+2026-09-16 18:25:51,994 [INFO] T-RECS single master simulation finished in 0.59 seconds.
+2026-09-16 18:25:51,994 [INFO] Processing master simulation catalogue...
+2026-09-16 18:25:52,008 [INFO] Master simulation produced 2,250 sources across bounding box.
+2026-09-16 18:25:52,009 [INFO] Sources within common 30.00 arcmin radius: 1,614
+2026-09-16 18:25:52,010 [INFO] Capped master sample to top 1024 brightest sources.
+2026-09-16 18:25:52,010 [INFO] Master sample locked: 1,024 identical sources across all frequencies.
+2026-09-16 18:25:52,029 [INFO] Saved 400.0 MHz catalogue: elaisn1_dualband_400MHz.csv (1,024 sources)
+2026-09-16 18:25:52,037 [INFO] Saved 610.0 MHz catalogue: elaisn1_dualband_610MHz.csv (1,024 sources)
+2026-09-16 18:25:52,039 [INFO] Cleaned up temporary simulation directory.
