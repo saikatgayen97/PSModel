@@ -1,0 +1,6 @@
+VERSION
+README.md
+script
+docs
+data
+release-files.txt

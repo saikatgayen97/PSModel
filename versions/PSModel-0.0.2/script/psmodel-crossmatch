@@ -1,0 +1,466 @@
+#!/usr/bin/env python3
+"""
+PSModel Catalogue Cross-Matcher (`psmodel-crossmatch`)
+======================================================
+Finds common sources between two astronomical catalogues based on a spatial
+radius search criterion (angular separation).
+
+Outputs a merged catalogue containing all columns from both input catalogues
+(with configurable suffixes, defaulting to `_1` and `_2`, yielding 2 x old columns),
+along with a `separation_arcsec` column recording the angular distance between matches.
+
+Conforms to PSModel developer guidelines:
+  - Input/Output catalogues in catalogue/
+  - Execution from workdir/ with logs written to workdir/logs/
+"""
+
+from __future__ import annotations
+
+import argparse
+import datetime
+import logging
+import os
+import sys
+from pathlib import Path
+from typing import Sequence
+
+import numpy as np
+import pandas as pd
+from astropy import units as u
+from astropy.coordinates import SkyCoord
+
+
+COMMON_RA_NAMES = [
+    "ra", "raj2000", "_raj2000", "ra_deg", "radeg", "ra(deg)", "ra_j2000",
+    "alpha", "pos_ra", "ra_degrees", "ra_deg_j2000"
+]
+COMMON_DEC_NAMES = [
+    "dec", "dej2000", "_dej2000", "dec_deg", "dedeg", "dec(deg)", "dec_j2000",
+    "delta", "pos_dec", "dec_degrees", "dec_deg_j2000"
+]
+
+
+def detect_coordinate_columns(
+    df: pd.DataFrame,
+    ra_hint: str | None = None,
+    dec_hint: str | None = None,
+    cat_label: str = "catalogue",
+) -> tuple[str, str]:
+    """Detect RA and Dec column names from dataframe or validate user hints."""
+    cols_lower = {c.strip().lower(): c for c in df.columns}
+
+    # RA
+    if ra_hint:
+        if ra_hint in df.columns:
+            ra_col = ra_hint
+        elif ra_hint.lower() in cols_lower:
+            ra_col = cols_lower[ra_hint.lower()]
+        else:
+            raise ValueError(f"Specified RA column '{ra_hint}' not found in {cat_label}. Available: {list(df.columns)}")
+    else:
+        ra_col = None
+        for cand in COMMON_RA_NAMES:
+            if cand in cols_lower:
+                ra_col = cols_lower[cand]
+                break
+        if ra_col is None:
+            raise ValueError(
+                f"Could not automatically identify RA column in {cat_label}. "
+                f"Available columns: {list(df.columns)}. Please specify --ra1 or --ra2."
+            )
+
+    # Dec
+    if dec_hint:
+        if dec_hint in df.columns:
+            dec_col = dec_hint
+        elif dec_hint.lower() in cols_lower:
+            dec_col = cols_lower[dec_hint.lower()]
+        else:
+            raise ValueError(f"Specified Dec column '{dec_hint}' not found in {cat_label}. Available: {list(df.columns)}")
+    else:
+        dec_col = None
+        for cand in COMMON_DEC_NAMES:
+            if cand in cols_lower:
+                dec_col = cols_lower[cand]
+                break
+        if dec_col is None:
+            raise ValueError(
+                f"Could not automatically identify Dec column in {cat_label}. "
+                f"Available columns: {list(df.columns)}. Please specify --dec1 or --dec2."
+            )
+
+    return ra_col, dec_col
+
+
+def build_skycoord(df: pd.DataFrame, ra_col: str, dec_col: str) -> SkyCoord:
+    """Construct Astropy SkyCoord from dataframe columns, handling degrees or sexagesimal strings."""
+    ra_series = df[ra_col]
+    dec_series = df[dec_col]
+
+    # Try direct numeric conversion (decimal degrees)
+    try:
+        ra_vals = pd.to_numeric(ra_series).values
+        dec_vals = pd.to_numeric(dec_series).values
+        return SkyCoord(ra=ra_vals * u.deg, dec=dec_vals * u.deg, frame="icrs")
+    except (ValueError, TypeError):
+        # Strings: could be sexagesimal
+        try:
+            return SkyCoord(ra=ra_series.astype(str).values, dec=dec_series.astype(str).values, frame="icrs")
+        except Exception as err:
+            raise ValueError(
+                f"Failed to parse celestial coordinates from columns '{ra_col}' and '{dec_col}': {err}"
+            )
+
+
+def resolve_output_path(output_arg: str | None, cat1_path: Path, cat2_path: Path) -> Path:
+    """Determine the destination path for the cross-matched catalogue in accordance with repo rules."""
+    # Find catalogue/ directory relative to cwd or repo root
+    cwd = Path.cwd()
+    if (cwd / "catalogue").is_dir():
+        default_cat_dir = cwd / "catalogue"
+    elif (cwd.parent / "catalogue").is_dir():
+        default_cat_dir = cwd.parent / "catalogue"
+    else:
+        default_cat_dir = cwd
+
+    if output_arg is None:
+        name1 = cat1_path.stem.replace(".csv", "")
+        name2 = cat2_path.stem.replace(".csv", "")
+        filename = f"{name1}_{name2}_matched.csv"
+        return default_cat_dir / filename
+
+    out_p = Path(output_arg)
+    if not out_p.name.lower().endswith(".csv"):
+        out_p = out_p.with_suffix(".csv")
+
+    # If user provided only a filename with no directory components, put it in default_cat_dir
+    if len(out_p.parts) == 1:
+        return default_cat_dir / out_p.name
+
+    return out_p
+
+
+def setup_logger() -> tuple[logging.Logger, Path | None]:
+    """Configure logging to console and to workdir/logs/ if accessible."""
+    logger = logging.getLogger("psmodel_crossmatch")
+    logger.setLevel(logging.INFO)
+    logger.handlers.clear()
+
+    formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
+
+    console_handler = logging.StreamHandler(sys.stdout)
+    console_handler.setFormatter(formatter)
+    logger.addHandler(console_handler)
+
+    # Check for logs directory in cwd/logs or ../workdir/logs or ./logs
+    log_dir = None
+    for cand in [Path.cwd() / "logs", Path.cwd() / "workdir" / "logs", Path.cwd().parent / "workdir" / "logs"]:
+        if cand.is_dir():
+            log_dir = cand
+            break
+        elif cand.parent.is_dir() and cand.name == "logs":
+            cand.mkdir(exist_ok=True)
+            log_dir = cand
+            break
+
+    log_file = None
+    if log_dir is not None:
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        log_file = log_dir / f"crossmatch_{timestamp}.log"
+        file_handler = logging.FileHandler(log_file, mode="w")
+        file_handler.setFormatter(formatter)
+        logger.addHandler(file_handler)
+
+    return logger, log_file
+
+
+def build_argparser() -> argparse.ArgumentParser:
+    """Construct command-line argument parser."""
+    parser = argparse.ArgumentParser(
+        prog="psmodel-crossmatch",
+        description=(
+            "Cross-match two astronomical catalogues using a spatial search radius. "
+            "Outputs a merged catalogue containing all columns from both catalogues "
+            "(with suffixes, defaulting to '_1' and '_2') plus a match separation column."
+        ),
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+
+    # Catalogues (supports positional or named)
+    parser.add_argument(
+        "cat1_pos",
+        nargs="?",
+        default=None,
+        help="Path to Catalogue 1 (CSV).",
+    )
+    parser.add_argument(
+        "cat2_pos",
+        nargs="?",
+        default=None,
+        help="Path to Catalogue 2 (CSV).",
+    )
+    parser.add_argument(
+        "--cat1",
+        dest="cat1_flag",
+        default=None,
+        help="Path to Catalogue 1 (alternative to positional argument).",
+    )
+    parser.add_argument(
+        "--cat2",
+        dest="cat2_flag",
+        default=None,
+        help="Path to Catalogue 2 (alternative to positional argument).",
+    )
+
+    # Radius options
+    radius_group = parser.add_mutually_exclusive_group()
+    radius_group.add_argument(
+        "--radius-arcsec", "--radius-sec", "--r-sec", "-r",
+        dest="radius_arcsec",
+        type=float,
+        default=None,
+        help="Search radius threshold in arcseconds (e.g. 5.0, 10.0).",
+    )
+    radius_group.add_argument(
+        "--radius-arcmin", "--radius-min", "--r-min",
+        dest="radius_arcmin",
+        type=float,
+        default=None,
+        help="Search radius threshold in arcminutes (e.g. 0.1, 0.5).",
+    )
+
+    # Column specifications
+    parser.add_argument(
+        "--ra1",
+        type=str,
+        default=None,
+        help="Right Ascension column name in Catalogue 1 (auto-detected if omitted).",
+    )
+    parser.add_argument(
+        "--dec1",
+        type=str,
+        default=None,
+        help="Declination column name in Catalogue 1 (auto-detected if omitted).",
+    )
+    parser.add_argument(
+        "--ra2",
+        type=str,
+        default=None,
+        help="Right Ascension column name in Catalogue 2 (auto-detected if omitted).",
+    )
+    parser.add_argument(
+        "--dec2",
+        type=str,
+        default=None,
+        help="Declination column name in Catalogue 2 (auto-detected if omitted).",
+    )
+
+    # Output & Suffixes
+    parser.add_argument(
+        "--suffix1",
+        type=str,
+        default="_1",
+        help="Column suffix appended to Catalogue 1 columns in the output.",
+    )
+    parser.add_argument(
+        "--suffix2",
+        type=str,
+        default="_2",
+        help="Column suffix appended to Catalogue 2 columns in the output.",
+    )
+    parser.add_argument(
+        "--output", "-o", "--catalogue-name",
+        dest="output",
+        type=str,
+        default=None,
+        help="Output CSV path or filename. Defaults to catalogue/<cat1>_<cat2>_matched.csv.",
+    )
+
+    # Matching Mode
+    parser.add_argument(
+        "--mode",
+        choices=["nearest", "mutual", "all"],
+        default="nearest",
+        help=(
+            "Cross-matching strategy: "
+            "'nearest' (for each source in Cat 1, find closest match in Cat 2 within radius), "
+            "'mutual' (mutual nearest neighbor: only pairs that are uniquely closest to each other), "
+            "'all' (all pair combinations within search radius)."
+        ),
+    )
+
+    # Exclusion / Inclusion Flags
+    parser.add_argument(
+        "--no-sep",
+        dest="include_sep",
+        action="store_false",
+        default=True,
+        help="Do not include the 'match_sep_arcsec' column in the output table.",
+    )
+
+    return parser
+
+
+def main(argv: Sequence[str] | None = None) -> int:
+    parser = build_argparser()
+    args = parser.parse_args(argv)
+
+    logger, log_file = setup_logger()
+
+    # Resolve Catalogue 1
+    cat1_raw = args.cat1_flag or args.cat1_pos
+    if not cat1_raw:
+        logger.error("Catalogue 1 must be specified (via positional argument or --cat1).")
+        return 1
+    cat1_path = Path(cat1_raw)
+    if not cat1_path.exists():
+        logger.error(f"Catalogue 1 not found: {cat1_path}")
+        return 1
+
+    # Resolve Catalogue 2
+    cat2_raw = args.cat2_flag or args.cat2_pos
+    if not cat2_raw:
+        logger.error("Catalogue 2 must be specified (via positional argument or --cat2).")
+        return 1
+    cat2_path = Path(cat2_raw)
+    if not cat2_path.exists():
+        logger.error(f"Catalogue 2 not found: {cat2_path}")
+        return 1
+
+    # Resolve Search Radius
+    if args.radius_arcmin is not None:
+        radius_arcsec = args.radius_arcmin * 60.0
+        radius_display = f"{args.radius_arcmin:.4f} arcmin ({radius_arcsec:.2f} arcsec)"
+    elif args.radius_arcsec is not None:
+        radius_arcsec = args.radius_arcsec
+        radius_display = f"{radius_arcsec:.2f} arcsec ({radius_arcsec / 60.0:.4f} arcmin)"
+    else:
+        # Default radius: 5.0 arcseconds
+        radius_arcsec = 5.0
+        radius_display = "5.00 arcsec (default)"
+
+    max_sep = radius_arcsec * u.arcsec
+
+    # Load Catalogues
+    try:
+        df1 = pd.read_csv(cat1_path)
+    except Exception as err:
+        logger.error(f"Failed to read Catalogue 1 ({cat1_path}): {err}")
+        return 1
+
+    try:
+        df2 = pd.read_csv(cat2_path)
+    except Exception as err:
+        logger.error(f"Failed to read Catalogue 2 ({cat2_path}): {err}")
+        return 1
+
+    n1 = len(df1)
+    n2 = len(df2)
+
+    # Detect coordinate columns
+    try:
+        ra_col1, dec_col1 = detect_coordinate_columns(df1, args.ra1, args.dec1, f"Cat 1 ({cat1_path.name})")
+        ra_col2, dec_col2 = detect_coordinate_columns(df2, args.ra2, args.dec2, f"Cat 2 ({cat2_path.name})")
+    except ValueError as err:
+        logger.error(str(err))
+        return 1
+
+    # Print Configuration Banner
+    print("=" * 74)
+    print("                   PSModel Catalogue Cross-Matcher")
+    print("=" * 74)
+    print(f"  Catalogue 1          : {cat1_path.name} ({n1:,} sources)")
+    print(f"    * RA/Dec Columns   : {ra_col1}, {dec_col1}")
+    print(f"  Catalogue 2          : {cat2_path.name} ({n2:,} sources)")
+    print(f"    * RA/Dec Columns   : {ra_col2}, {dec_col2}")
+    print(f"  Search Radius        : {radius_display}")
+    print(f"  Match Mode           : {args.mode.upper()}")
+    print(f"  Column Suffixes      : Cat 1 -> '{args.suffix1}', Cat 2 -> '{args.suffix2}'")
+    print("=" * 74)
+
+    # Construct SkyCoord objects
+    try:
+        coords1 = build_skycoord(df1, ra_col1, dec_col1)
+        coords2 = build_skycoord(df2, ra_col2, dec_col2)
+    except ValueError as err:
+        logger.error(str(err))
+        return 1
+
+    # Perform Cross-Matching
+    logger.info("Executing spatial cross-matching...")
+
+    if args.mode == "nearest":
+        # For each source in Cat 1, find nearest in Cat 2
+        idx2, sep2d, _ = coords1.match_to_catalog_sky(coords2)
+        valid_mask = sep2d <= max_sep
+        idx1_matched = np.where(valid_mask)[0]
+        idx2_matched = idx2[valid_mask]
+        matched_seps_arcsec = sep2d[valid_mask].to(u.arcsec).value
+
+    elif args.mode == "mutual":
+        # Mutual nearest neighbor match
+        idx1_to_2, sep1, _ = coords1.match_to_catalog_sky(coords2)
+        idx2_to_1, sep2, _ = coords2.match_to_catalog_sky(coords1)
+        is_mutual = (idx2_to_1[idx1_to_2] == np.arange(len(coords1))) & (sep1 <= max_sep)
+        idx1_matched = np.where(is_mutual)[0]
+        idx2_matched = idx1_to_2[is_mutual]
+        matched_seps_arcsec = sep1[is_mutual].to(u.arcsec).value
+
+    elif args.mode == "all":
+        # All pairs within radius
+        idx1_matched, idx2_matched, sep2d, _ = coords2.search_around_sky(coords1, max_sep)
+        matched_seps_arcsec = sep2d.to(u.arcsec).value
+
+    n_matches = len(idx1_matched)
+
+    if n_matches == 0:
+        logger.warning("No cross-matched sources found within the search radius.")
+        return 0
+
+    # Build Merged Catalogue
+    df1_sub = df1.iloc[idx1_matched].copy().reset_index(drop=True)
+    df2_sub = df2.iloc[idx2_matched].copy().reset_index(drop=True)
+
+    # Rename columns with suffixes
+    df1_sub = df1_sub.add_suffix(args.suffix1)
+    df2_sub = df2_sub.add_suffix(args.suffix2)
+
+    merged_df = pd.concat([df1_sub, df2_sub], axis=1)
+
+    if args.include_sep:
+        merged_df["match_sep_arcsec"] = matched_seps_arcsec
+
+    # Resolve output path
+    out_path = resolve_output_path(args.output, cat1_path, cat2_path)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+
+    # Save to CSV
+    merged_df.to_csv(out_path, index=False)
+
+    # Statistics
+    pct1 = (n_matches / n1) * 100.0 if n1 > 0 else 0.0
+    pct2 = (n_matches / n2) * 100.0 if n2 > 0 else 0.0
+
+    print("\n##########################################################################")
+    print("                       CROSS-MATCH RESULTS")
+    print("##########################################################################")
+    print(f"  Total Matches Found  : {n_matches:,}")
+    print(f"    * Fraction of Cat 1: {pct1:.2f}% ({n_matches:,} / {n1:,})")
+    print(f"    * Fraction of Cat 2: {pct2:.2f}% ({n_matches:,} / {n2:,})")
+    print("  Separation Statistics (arcsec):")
+    print(f"    * Minimum          : {np.min(matched_seps_arcsec):.4f}\"")
+    print(f"    * Median           : {np.median(matched_seps_arcsec):.4f}\"")
+    print(f"    * Mean             : {np.mean(matched_seps_arcsec):.4f}\"")
+    print(f"    * Maximum          : {np.max(matched_seps_arcsec):.4f}\"")
+    print(f"  Output Table Columns : {len(merged_df.columns)} ({len(df1.columns)} from Cat 1 + {len(df2.columns)} from Cat 2"
+          + (" + 1 separation)" if args.include_sep else ")"))
+    print(f"  Output Saved To      : {out_path}")
+    if log_file:
+        print(f"  Execution Log Saved  : {log_file}")
+    print("##########################################################################\n")
+
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
