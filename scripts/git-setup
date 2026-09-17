@@ -1,0 +1,6 @@
+#!/usr/bin/env python3
+# project-setup managed launcher
+import sys
+sys.path.insert(0, '/Users/sgayen/.local/lib/project-setup')
+from project_setup.gitsetup import main
+main()
